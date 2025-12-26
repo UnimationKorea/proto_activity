@@ -1,0 +1,648 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>구몬 학습 - 프리미엄 액티비티</title>
+    <!-- Google Fonts: Inter for precision, Noto Sans KR for support -->
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap"
+        rel="stylesheet">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Fabric.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/fabric.js/5.3.1/fabric.min.js"></script>
+
+    <style>
+        :root {
+            --m-bg: #FFFFFF;
+            --m-off-white: #F8F9FA;
+            --m-text: #000000;
+            --m-secondary: #8E8E93;
+            --m-accent: #007AFF;
+            --m-border: #E5E5EA;
+            --m-radius-lg: 16px;
+            --m-radius-sm: 8px;
+            --m-blue-light: #6FBFF9;
+        }
+
+        body,
+        html {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            background-color: var(--m-off-white);
+            overflow: hidden;
+            font-family: 'Inter', 'Noto Sans KR', sans-serif;
+            user-select: none;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        #activity-container {
+            position: relative;
+            width: 1280px;
+            height: 1024px;
+            background: var(--m-bg);
+            box-shadow: 0 4px 40px rgba(0, 0, 0, 0.03);
+            border-radius: 20px;
+            border: 1px solid var(--m-border);
+            overflow: hidden;
+        }
+
+        /* Nav Header */
+        #nav-header {
+            position: absolute;
+            top: 40px;
+            left: 0;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 40px;
+            z-index: 100;
+        }
+
+        #stage-indicator {
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--m-text);
+            text-transform: uppercase;
+            letter-spacing: 0.1em;
+            background: var(--m-off-white);
+            padding: 8px 16px;
+            border-radius: 30px;
+            border: 1px solid var(--m-border);
+        }
+
+        .nav-btn {
+            background: var(--m-bg);
+            border: 1px solid var(--m-border);
+            border-radius: 50%;
+            width: 44px;
+            height: 44px;
+            color: var(--m-text);
+            cursor: pointer;
+            transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .nav-btn:hover:not(:disabled) {
+            background: var(--m-off-white);
+            transform: scale(1.05);
+        }
+
+        .nav-btn:disabled {
+            opacity: 0.2;
+            cursor: default;
+        }
+
+        /* Generic Control Box styling */
+        .ui-control-box {
+            position: absolute;
+            background: var(--m-bg);
+            border: 1px solid var(--m-border);
+            padding: 10px 18px;
+            border-radius: 12px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            z-index: 10;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+        }
+
+        #scale-control {
+            bottom: 60px;
+            left: 60px;
+        }
+
+        #pinyin-size-control {
+            bottom: 60px;
+            left: 40px;
+        }
+
+        #hanja-size-control {
+            bottom: 60px;
+            left: 270px;
+        }
+
+        #screen-size-control {
+            bottom: 60px;
+            left: 500px;
+        }
+
+        .control-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .control-label {
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--m-secondary);
+            min-width: 55px;
+        }
+
+        .control-value {
+            font-size: 13px;
+            font-weight: 700;
+            color: var(--m-accent);
+            min-width: 25px;
+        }
+
+        /* Range Input Styling */
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100px;
+            height: 4px;
+            background: var(--m-border);
+            border-radius: 2px;
+            outline: none;
+        }
+
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            width: 16px;
+            height: 16px;
+            background: var(--m-accent);
+            border-radius: 50%;
+            cursor: pointer;
+            transition: transform 0.1s ease;
+        }
+
+        /* Controls Area */
+        #controls-container {
+            position: absolute;
+            bottom: 60px;
+            right: 60px;
+            display: flex;
+            gap: 16px;
+            z-index: 10;
+        }
+
+        .control-btn {
+            padding: 14px 28px;
+            border: none;
+            border-radius: 12px;
+            font-size: 16px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+
+        .control-btn.primary {
+            background: var(--m-text);
+            color: #fff;
+        }
+
+        .control-btn.secondary {
+            background: var(--m-bg);
+            color: var(--m-text);
+            border: 1px solid var(--m-border);
+        }
+
+        .hidden {
+            display: none !important;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="activity-container">
+        <div id="nav-header">
+            <button id="btn-prev" class="nav-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="15 18 9 12 15 6"></polyline>
+                </svg>
+            </button>
+            <span id="stage-indicator">TYPE 1</span>
+            <button id="btn-next" class="nav-btn">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"
+                    stroke-linecap="round" stroke-linejoin="round">
+                    <polyline points="9 18 15 12 9 6"></polyline>
+                </svg>
+            </button>
+        </div>
+
+        <canvas id="c"></canvas>
+
+        <!-- Controls -->
+        <div id="scale-control" class="ui-control-box hidden">
+            <div class="control-row">
+                <label class="control-label">입력 감도</label>
+                <select id="zone-scale" class="text-sm font-bold bg-transparent border-none outline-none">
+                    <option value="1.2" selected>120%</option>
+                    <option value="1.3">130%</option>
+                    <option value="1.4">140%</option>
+                    <option value="1.5">150%</option>
+                </select>
+            </div>
+        </div>
+
+        <div id="pinyin-size-control" class="ui-control-box hidden">
+            <div class="control-row">
+                <label class="control-label">병음 크기</label>
+                <input type="range" id="pinyin-slider" min="20" max="60" value="32">
+                <span id="pinyin-val" class="control-value">32</span>
+            </div>
+        </div>
+
+        <div id="hanja-size-control" class="ui-control-box hidden">
+            <div class="control-row">
+                <label class="control-label">한자 크기</label>
+                <input type="range" id="hanja-slider" min="60" max="150" value="100">
+                <span id="hanja-val" class="control-value">100</span>
+            </div>
+        </div>
+
+        <div id="screen-size-control" class="ui-control-box hidden">
+            <div class="control-row">
+                <label class="control-label">화면 사이즈</label>
+                <input type="range" id="screen-slider" min="0.3" max="1.0" step="0.05" value="1.0">
+                <span id="screen-val" class="control-value">100</span>
+            </div>
+        </div>
+
+        <div id="controls-container">
+            <button id="reset-btn" class="control-btn secondary">초기화</button>
+            <button id="done-btn" class="control-btn primary">입력 완료</button>
+        </div>
+    </div>
+
+    <script>
+        const CONFIG = {
+            CANVAS_WIDTH: 1280,
+            CANVAS_HEIGHT: 1024,
+            IDLE_TIMEOUT: 2000,
+            ANIMATION_DURATION: 800,
+            CLUSTER_GAP_THRESHOLD: 45,
+            HINT_DURATION: 1800,
+            COLORS: {
+                text: '#000000',
+                secondary: '#8E8E93',
+                border: '#E5E5EA',
+                targetFill: 'rgba(0, 0, 0, 0.02)',
+                targetStroke: '#E5E5EA',
+                hint: '#C7C7CC',
+                activeZone: 'rgba(0, 122, 255, 0.05)',
+                activeStroke: '#007AFF',
+                mercuryBlue: '#6FBFF9'
+            },
+            FONTS: {
+                main: 'Inter, "Noto Sans KR", sans-serif',
+                chinese: '"Noto Sans SC", "Noto Sans KR", serif'
+            }
+        };
+
+        const STAGES = [
+            { id: 1, type: 'normal', inputType: 'pad', title: "Type 1", sentence: { pre: "나는", post: "에 갑니다.", y: 400 }, targets: [{ x: 440, y: 340, width: 220, height: 120 }] },
+            { id: 2, type: 'normal', inputType: 'pad', title: "Type 2", sentence: { pre: "나는", post: "에 갑니다.", y: 400 }, targets: [{ x: 440, y: 340, width: 140, height: 120 }, { x: 600, y: 340, width: 140, height: 120 }] },
+            { id: 3, type: 'hint_audio', inputType: 'pad', title: "Type 3", sentence: { pre: "나는", post: "에 갑니다.", y: 400 }, targets: [{ x: 440, y: 340, width: 140, height: 120 }, { x: 600, y: 340, width: 140, height: 120 }], hintText: ["학", "교"], audioWord: "학교", maxAudioPlays: 2 },
+            { id: 4, type: 'hint_audio', inputType: 'direct', title: "Type 4", sentence: { pre: "나는", post: "에 갑니다.", y: 400 }, targets: [{ x: 440, y: 340, width: 140, height: 120 }, { x: 600, y: 340, width: 140, height: 120 }], hintText: ["학", "교"], audioWord: "학교", maxAudioPlays: 2 },
+            {
+                id: 10, type: 'drag_drop', inputType: 'drag', title: "Type 10",
+                subText: "당신은 밥을 먹었습니까?",
+                tokens: [
+                    { char: "你", pinyin: "Nǐ", fixed: true },
+                    { char: "吃", pinyin: "chī", fixed: false },
+                    { char: "饭", pinyin: "fàn", fixed: true },
+                    { char: "了", pinyin: "le", fixed: false },
+                    { char: "吗", pinyin: "ma", fixed: false }
+                ],
+                sourceItems: ["ma", "chī", "le"]
+            }
+        ];
+
+        const WRITING_PAD_CONFIG = { x: 240, y: 640, width: 800, height: 280 };
+
+        let currentStageIndex = 0;
+        let currentStrokes = [];
+        let idleTimer = null;
+        let isMoving = false;
+        let filledSlots = [];
+        let activeSlotIndex = 0;
+        let audioPlayCount = 0;
+        let hintTimer = null;
+        let activeZoneRect = null;
+        let currentExpansionFactor = 1.2;
+        let currentPinyinSize = 32;
+        let currentHanjaSize = 100;
+        let currentContentScale = 1.0;
+        let dropTargets = [];
+
+        const canvas = new fabric.Canvas('c', {
+            width: CONFIG.CANVAS_WIDTH, height: CONFIG.CANVAS_HEIGHT,
+            selection: false, isDrawingMode: true, retinaScaling: true,
+            preserveObjectStacking: true
+        });
+
+        const brush = new fabric.PencilBrush(canvas);
+        brush.color = "#000000"; brush.width = 7;
+        canvas.freeDrawingBrush = brush;
+
+        const ui = {
+            prev: document.getElementById('btn-prev'),
+            next: document.getElementById('btn-next'),
+            indicator: document.getElementById('stage-indicator'),
+            done: document.getElementById('done-btn'),
+            reset: document.getElementById('reset-btn'),
+            scaleControl: document.getElementById('scale-control'),
+            scaleSelect: document.getElementById('zone-scale'),
+            pinyinControl: document.getElementById('pinyin-size-control'),
+            pinyinSlider: document.getElementById('pinyin-slider'),
+            pinyinVal: document.getElementById('pinyin-val'),
+            hanjaControl: document.getElementById('hanja-size-control'),
+            hanjaSlider: document.getElementById('hanja-slider'),
+            hanjaVal: document.getElementById('hanja-val'),
+            screenControl: document.getElementById('screen-size-control'),
+            screenSlider: document.getElementById('screen-slider'),
+            screenVal: document.getElementById('screen-val')
+        };
+
+        function loadStage(index) {
+            if (index < 0 || index >= STAGES.length) index = 0;
+            currentStageIndex = index;
+            const stage = STAGES[index];
+
+            clearTimeout(hintTimer);
+            filledSlots = [];
+            activeSlotIndex = 0;
+            dropTargets = [];
+
+            ui.indicator.textContent = stage.title;
+            ui.prev.disabled = index === 0;
+            ui.next.disabled = index === STAGES.length - 1;
+
+            ui.scaleControl.classList.toggle('hidden', stage.inputType !== 'direct');
+            const isDrag = stage.inputType === 'drag';
+            ui.pinyinControl.classList.toggle('hidden', !isDrag);
+            ui.hanjaControl.classList.toggle('hidden', !isDrag);
+            ui.screenControl.classList.toggle('hidden', !isDrag);
+
+            if (isDrag) {
+                canvas.isDrawingMode = false;
+                renderDragStage(stage);
+            } else {
+                canvas.isDrawingMode = true;
+                filledSlots = new Array(stage.targets ? stage.targets.length : 0).fill(false);
+                renderStage();
+                if (stage.hintText) showHints(stage);
+                if (stage.inputType === 'direct') updateActiveZoneVisual();
+            }
+        }
+
+        function renderStage() {
+            canvas.clear();
+            canvas.backgroundColor = '#FFFFFF';
+            currentStrokes = [];
+            isMoving = false;
+            activeZoneRect = null;
+            const stage = STAGES[currentStageIndex];
+            if (!stage.targets) return;
+            const targetY = stage.targets[0].y;
+            const centerY = targetY + stage.targets[0].height / 2;
+            const vOffset = 6;
+
+            if (stage.inputType === 'pad') {
+                canvas.add(new fabric.Rect({
+                    left: WRITING_PAD_CONFIG.x, top: WRITING_PAD_CONFIG.y,
+                    width: WRITING_PAD_CONFIG.width, height: WRITING_PAD_CONFIG.height,
+                    fill: '#F8F9FA', stroke: CONFIG.COLORS.border, strokeWidth: 1,
+                    rx: 16, ry: 16, selectable: false, evented: false
+                }));
+            }
+            stage.targets.forEach(t => {
+                canvas.add(new fabric.Rect({
+                    left: t.x, top: t.y, width: t.width, height: t.height,
+                    fill: CONFIG.COLORS.targetFill, stroke: CONFIG.COLORS.targetStroke,
+                    strokeWidth: 1.5, rx: 12, ry: 12, selectable: false, evented: false
+                }));
+            });
+            const fontSize = 56;
+            canvas.add(new fabric.Text(stage.sentence.pre, {
+                left: stage.targets[0].x - 32, top: centerY + vOffset,
+                fontSize: fontSize, fontFamily: CONFIG.FONTS.main, fontWeight: 700,
+                fill: CONFIG.COLORS.text, originX: 'right', originY: 'center', selectable: false
+            }));
+            const lastT = stage.targets[stage.targets.length - 1];
+            canvas.add(new fabric.Text(stage.sentence.post, {
+                left: lastT.x + lastT.width + 32, top: centerY + vOffset,
+                fontSize: fontSize, fontFamily: CONFIG.FONTS.main, fontWeight: 700,
+                fill: CONFIG.COLORS.text, originX: 'left', originY: 'center', selectable: false
+            }));
+            canvas.renderAll();
+        }
+
+        function renderDragStage(stage) {
+            canvas.clear();
+            canvas.backgroundColor = '#FFFFFF';
+            dropTargets = [];
+
+            const scale = currentContentScale;
+            // Base positions and dimensions
+            const centerX = 1280 / 2;
+            const barW = 1000 * scale;
+            const barH = 100 * scale;
+            const barY = 150;
+
+            // 1. Blue Bar Area
+            canvas.add(new fabric.Rect({
+                left: centerX, top: barY + barH / 2, width: barW, height: barH,
+                fill: CONFIG.COLORS.mercuryBlue, rx: 16 * scale, ry: 16 * scale,
+                originX: 'center', originY: 'center', selectable: false, evented: false
+            }));
+
+            // 2. Speech Bubble
+            const bubbleY = barY + barH + 30; // Gap below bar
+            const bubbleW = 900 * scale;
+            const bubbleH = 450 * scale;
+
+            canvas.add(new fabric.Rect({
+                left: centerX, top: bubbleY + bubbleH / 2, width: bubbleW, height: bubbleH,
+                fill: '#FFFFFF', stroke: CONFIG.COLORS.border, strokeWidth: 2 * scale,
+                rx: 32 * scale, ry: 32 * scale, originX: 'center', originY: 'center',
+                selectable: false, evented: false
+            }));
+
+            // Bubble Tail (simplified positioning)
+            canvas.add(new fabric.Path(`M ${centerX - 20 * scale} ${bubbleY + bubbleH} L ${centerX + 20 * scale} ${bubbleY + bubbleH} L ${centerX} ${bubbleY + bubbleH + 50 * scale} Z`, {
+                fill: '#FFFFFF', stroke: CONFIG.COLORS.border, strokeWidth: 2 * scale, selectable: false, evented: false
+            }));
+
+            // 3. Tokens logic
+            const tokenGap = 160 * scale;
+            const startX = centerX - (stage.tokens.length - 1) * tokenGap / 2;
+            const contentCenterY = bubbleY + bubbleH / 2;
+
+            stage.tokens.forEach((token, i) => {
+                const x = startX + i * tokenGap;
+                const hanjaY = contentCenterY + 40 * scale;
+                const pinyinSlotY = contentCenterY - 60 * scale;
+
+                // Hanja
+                canvas.add(new fabric.Text(token.char, {
+                    left: x, top: hanjaY,
+                    fontSize: currentHanjaSize * scale, fontFamily: CONFIG.FONTS.chinese, fontWeight: 500,
+                    fill: CONFIG.COLORS.text, originX: 'center', selectable: false, name: 'hanja-text'
+                }));
+                // Pinyin Slot
+                const slotW = 110 * scale; const slotH = 70 * scale;
+                const slot = new fabric.Rect({
+                    left: x, top: pinyinSlotY, width: slotW, height: slotH,
+                    fill: 'rgba(0,0,0,0.02)', stroke: CONFIG.COLORS.mercuryBlue, strokeWidth: (token.fixed ? 0 : 2) * scale,
+                    rx: 8 * scale, ry: 8 * scale, originX: 'center', originY: 'center', selectable: false, evented: false
+                });
+                canvas.add(slot);
+                if (token.fixed) {
+                    canvas.add(new fabric.Text(token.pinyin, {
+                        left: x, top: pinyinSlotY,
+                        fontSize: currentPinyinSize * scale, fontFamily: CONFIG.FONTS.main, fontWeight: 500,
+                        fill: CONFIG.COLORS.text, originX: 'center', originY: 'center', selectable: false, name: 'pinyin-text'
+                    }));
+                } else {
+                    dropTargets.push({ x: x, y: pinyinSlotY, width: slotW, height: slotH, visualSlot: slot });
+                }
+            });
+
+            // Subtext
+            canvas.add(new fabric.Text(stage.subText, {
+                left: centerX, top: bubbleY + bubbleH - 60 * scale,
+                fontSize: 28 * scale, fontFamily: CONFIG.FONTS.main, fontWeight: 500,
+                fill: CONFIG.COLORS.secondary, originX: 'center', selectable: false
+            }));
+
+            // 4. Draggable items (staying inside bar)
+            const itemGap = 180 * scale;
+            const itemStartX = centerX - (stage.sourceItems.length - 1) * itemGap / 2;
+            stage.sourceItems.forEach((item, i) => {
+                const itemW = 100 * scale; const itemH = 60 * scale;
+                const group = new fabric.Group([
+                    new fabric.Rect({ width: itemW, height: itemH, fill: '#FFFFFF', stroke: CONFIG.COLORS.mercuryBlue, strokeWidth: 1 * scale, rx: 8 * scale, ry: 8 * scale, originX: 'center', originY: 'center' }),
+                    new fabric.Text(item, { fontSize: currentPinyinSize * 0.8 * scale, fontFamily: CONFIG.FONTS.main, fontWeight: 500, fill: CONFIG.COLORS.text, originX: 'center', originY: 'center', name: 'pinyin-text' })
+                ], {
+                    left: itemStartX + i * itemGap, top: barY + barH / 2, originX: 'center', originY: 'center', hasControls: false, hasBorders: false, hoverCursor: 'grab'
+                });
+                canvas.add(group);
+                group.originalPos = { x: group.left, y: group.top };
+            });
+            canvas.renderAll();
+        }
+
+        canvas.on('mouse:up', () => {
+            const obj = canvas.getActiveObject();
+            if (!obj || STAGES[currentStageIndex].inputType !== 'drag') return;
+            let snapped = false;
+            for (let t of dropTargets) {
+                if (Math.abs(obj.left - t.x) < 60 && Math.abs(obj.top - t.y) < 60) {
+                    obj.animate({ left: t.x, top: t.y }, {
+                        duration: 100, onChange: canvas.renderAll.bind(canvas), onComplete: () => {
+                            t.visualSlot.set('strokeWidth', 0); obj.item(0).set('strokeWidth', 0);
+                            obj.item(1).set({ fontSize: currentPinyinSize * currentContentScale }); canvas.renderAll();
+                        }
+                    });
+                    snapped = true; break;
+                }
+            }
+            if (!snapped) obj.animate({ left: obj.originalPos.x, top: obj.originalPos.y }, { duration: 300, easing: fabric.util.ease.easeOutBack, onChange: canvas.renderAll.bind(canvas) });
+        });
+
+        ui.pinyinSlider.addEventListener('input', (e) => {
+            currentPinyinSize = parseInt(e.target.value);
+            ui.pinyinVal.textContent = currentPinyinSize;
+            renderDragStage(STAGES[currentStageIndex]);
+        });
+
+        ui.hanjaSlider.addEventListener('input', (e) => {
+            currentHanjaSize = parseInt(e.target.value); ui.hanjaVal.textContent = currentHanjaSize;
+            renderDragStage(STAGES[currentStageIndex]);
+        });
+
+        ui.screenSlider.addEventListener('input', (e) => {
+            currentContentScale = parseFloat(e.target.value);
+            ui.screenVal.textContent = Math.round(currentContentScale * 100);
+            renderDragStage(STAGES[currentStageIndex]);
+        });
+
+        function showHints(stage) {
+            if (!stage.targets) return;
+            const hints = stage.targets.map((t, i) => {
+                const txt = new fabric.Text(stage.hintText[i], { left: t.x + t.width / 2, top: t.y + t.height / 2, fontSize: 64, fontFamily: CONFIG.FONTS.main, fontWeight: 700, fill: CONFIG.COLORS.hint, originX: 'center', originY: 'center', opacity: 0.6, selectable: false, evented: false });
+                canvas.add(txt); return txt;
+            });
+            hintTimer = setTimeout(() => { hints.forEach(h => h.animate('opacity', 0, { duration: 400, onChange: canvas.renderAll.bind(canvas), onComplete: () => canvas.remove(h) })); }, CONFIG.HINT_DURATION);
+        }
+
+        function updateActiveZoneVisual() {
+            const stage = STAGES[currentStageIndex]; if (stage.inputType !== 'direct' || activeSlotIndex >= stage.targets.length) return;
+            if (activeZoneRect) canvas.remove(activeZoneRect);
+            const t = stage.targets[activeSlotIndex]; const w = t.width * currentExpansionFactor, h = t.height * currentExpansionFactor;
+            activeZoneRect = new fabric.Rect({ left: t.x - (w - t.width) / 2, top: t.y - (h - t.height) / 2, width: w, height: h, fill: CONFIG.COLORS.activeZone, stroke: CONFIG.COLORS.activeStroke, strokeWidth: 1, strokeDashArray: [4, 4], rx: 16, ry: 16, selectable: false, evented: false });
+            canvas.add(activeZoneRect); activeZoneRect.sendToBack();
+        }
+
+        function performPlacement() {
+            if (currentStrokes.length === 0 || isMoving) return;
+            const stage = STAGES[currentStageIndex]; isMoving = true; canvas.isDrawingMode = false;
+            if (stage.inputType === 'direct') {
+                const target = stage.targets[activeSlotIndex]; const group = new fabric.Group(currentStrokes, { originX: 'center', originY: 'center', selectable: false });
+                currentStrokes.forEach(s => canvas.remove(s)); canvas.add(group); filledSlots[activeSlotIndex] = true; activeSlotIndex++;
+                animateAndClean(group, target, () => updateActiveZoneVisual());
+            } else {
+                const available = filledSlots.map((f, i) => f ? -1 : i).filter(v => v !== -1);
+                if (available.length === 0) { currentStrokes.forEach(s => canvas.remove(s)); currentStrokes = []; isMoving = false; canvas.isDrawingMode = true; return; }
+                const groups = groupStrokesByCharacter(currentStrokes); const toMove = groups.slice(0, available.length);
+                const anims = toMove.map((g, i) => {
+                    const idx = available[i]; filledSlots[idx] = true; const fg = new fabric.Group(g, { originX: 'center', originY: 'center', selectable: false });
+                    g.forEach(s => canvas.remove(s)); canvas.add(fg); return animateAndClean(fg, stage.targets[idx]);
+                });
+                Promise.all(anims).then(() => { currentStrokes = []; isMoving = false; canvas.isDrawingMode = true; });
+            }
+        }
+
+        function animateAndClean(obj, target, extraCb) {
+            return new Promise(resolve => {
+                const br = obj.getBoundingRect(); const scale = Math.min(target.width * 0.8 / br.width, target.height * 0.8 / br.height, 1.8);
+                obj.animate({ left: target.x + target.width / 2, top: target.y + target.height / 2, scaleX: scale, scaleY: scale }, { duration: CONFIG.ANIMATION_DURATION, easing: fabric.util.ease.easeInOutQuart, onChange: canvas.renderAll.bind(canvas), onComplete: () => { if (extraCb) extraCb(); currentStrokes = []; isMoving = false; canvas.isDrawingMode = true; resolve(); } });
+            });
+        }
+
+        function groupStrokesByCharacter(strokes) {
+            if (strokes.length === 0) return [];
+            const data = strokes.map(s => { const b = s.getBoundingRect(); return { o: s, l: b.left, r: b.left + b.width }; });
+            data.sort((a, b) => a.l - b.l); const groups = []; let cur = [data[0]];
+            for (let i = 1; i < data.length; i++) { if (data[i].l > Math.max(...cur.map(x => x.r)) + CONFIG.CLUSTER_GAP_THRESHOLD) { groups.push(cur); cur = [data[i]]; } else cur.push(data[i]); }
+            groups.push(cur); return groups.map(g => g.map(x => x.o));
+        }
+
+        canvas.on('mouse:down', (o) => {
+            if (isMoving || STAGES[currentStageIndex].inputType === 'drag') return;
+            const p = canvas.getPointer(o.e); const stage = STAGES[currentStageIndex];
+            let pin = false;
+            if (stage.inputType === 'pad') { const b = WRITING_PAD_CONFIG; pin = p.x >= b.x && p.x <= b.x + b.width && p.y >= b.y && p.y <= b.y + b.height; }
+            else if (stage.inputType === 'direct' && stage.targets && activeSlotIndex < stage.targets.length) {
+                const t = stage.targets[activeSlotIndex]; const w = t.width * currentExpansionFactor, h = t.height * currentExpansionFactor;
+                pin = p.x >= t.x - (w - t.width) / 2 && p.x <= t.x + t.width + (w - t.width) / 2 && p.y >= t.y - (h - t.height) / 2 && p.y <= t.y + t.height + (h - t.height) / 2;
+            }
+            canvas.isDrawingMode = pin;
+        });
+
+        canvas.on('path:created', (e) => { currentStrokes.push(e.path); e.path.selectable = false; if (!isMoving) { clearTimeout(idleTimer); idleTimer = setTimeout(performPlacement, CONFIG.IDLE_TIMEOUT); } });
+        ui.prev.addEventListener('click', () => loadStage(currentStageIndex - 1));
+        ui.next.addEventListener('click', () => loadStage(currentStageIndex + 1));
+        ui.reset.addEventListener('click', () => loadStage(currentStageIndex));
+        ui.done.addEventListener('click', performPlacement);
+        ui.scaleSelect.addEventListener('change', (e) => { currentExpansionFactor = parseFloat(e.target.value); updateActiveZoneVisual(); });
+
+        loadStage(0);
+    </script>
+</body>
+
+</html>
