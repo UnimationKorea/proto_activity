@@ -28,240 +28,7 @@ const CONFIG = {
     }
 };
 
-const STAGES = [
-    {
-        "id": 1,
-        "type": "hint_audio",
-        "inputType": "pad",
-        "title": "Level 1",
-        "sentence": {
-            "pre": "나는",
-            "post": "에 갑니다.",
-            "y": 400
-        },
-        "targets": [
-            {
-                "x": 440,
-                "y": 340,
-                "width": 220,
-                "height": 120
-            }
-        ]
-    },
-    {
-        "id": 2,
-        "type": "normal",
-        "inputType": "pad",
-        "title": "Level 2",
-        "sentence": {
-            "pre": "나는",
-            "post": "에 갑니다.",
-            "y": 400
-        },
-        "targets": [
-            {
-                "x": 440,
-                "y": 340,
-                "width": 140,
-                "height": 120
-            },
-            {
-                "x": 600,
-                "y": 340,
-                "width": 140,
-                "height": 120
-            }
-        ],
-        "bgImage": "images/20260105_193944.png"
-    },
-    {
-        "id": 3,
-        "type": "hint_audio",
-        "inputType": "direct",
-        "title": "Level 3",
-        "sentence": {
-            "pre": "나는",
-            "post": "에 갑니다.",
-            "y": 400
-        },
-        "targets": [
-            {
-                "x": 440,
-                "y": 340,
-                "width": 140,
-                "height": 120
-            },
-            {
-                "x": 600,
-                "y": 340,
-                "width": 140,
-                "height": 120
-            }
-        ],
-        "hintText": [
-            "학",
-            "교"
-        ],
-        "audioWord": "학교",
-        "maxAudioPlays": 2
-    },
-    {
-        "id": 5,
-        "type": "blink_pad",
-        "inputType": "pad",
-        "title": "Level 5",
-        "sentence": {
-            "pre": "나는",
-            "post": "에 갑니다.",
-            "y": 400
-        },
-        "targets": [
-            {
-                "x": 440,
-                "y": 340,
-                "width": 140,
-                "height": 120
-            },
-            {
-                "x": 600,
-                "y": 340,
-                "width": 140,
-                "height": 120
-            }
-        ]
-    },
-    {
-        "id": 6,
-        "type": "drag_drop",
-        "inputType": "drag",
-        "title": "Level 6",
-        "subText": "당신은 밥을 먹었습니까?",
-        "tokens": [
-            {
-                "char": "你",
-                "pinyin": "Nǐ",
-                "fixed": true
-            },
-            {
-                "char": "吃",
-                "pinyin": "chī",
-                "fixed": false
-            },
-            {
-                "char": "饭",
-                "pinyin": "fàn",
-                "fixed": true
-            },
-            {
-                "char": "了",
-                "pinyin": "le",
-                "fixed": false
-            },
-            {
-                "char": "吗",
-                "pinyin": "ma",
-                "fixed": false
-            }
-        ],
-        "sourceItems": [
-            "ma",
-            "chī",
-            "le"
-        ]
-    },
-    {
-        "id": 7,
-        "type": "alphabet_drag",
-        "inputType": "drag",
-        "title": "Level 7",
-        "bgImage": "images/cruise ship.png",
-        "feedback": {
-            "boy": "images/boy-1.png",
-            "girl": "images/girl-1.png"
-        },
-        "targets": [
-            {
-                "x": 297,
-                "y": 385,
-                "char": "a",
-                "fixed": true
-            },
-            {
-                "x": 454,
-                "y": 385,
-                "char": "b",
-                "fixed": false
-            },
-            {
-                "x": 607,
-                "y": 385,
-                "char": "c",
-                "fixed": true
-            },
-            {
-                "x": 758,
-                "y": 385,
-                "char": "d",
-                "fixed": true
-            },
-            {
-                "x": 934,
-                "y": 385,
-                "char": "e",
-                "fixed": true
-            },
-            {
-                "x": 1090,
-                "y": 385,
-                "char": "f",
-                "fixed": true
-            },
-            {
-                "x": 1215,
-                "y": 385,
-                "char": "g",
-                "fixed": true
-            }
-        ],
-        "sourceItems": [
-            {
-                "char": "h",
-                "x": 420,
-                "y": 750
-            },
-            {
-                "char": "b",
-                "x": 640,
-                "y": 750
-            },
-            {
-                "char": "r",
-                "x": 860,
-                "y": 750
-            }
-        ]
-    },
-    {
-        "id": 10,
-        "type": "speech_recognition",
-        "inputType": "none",
-        "title": "Level 10",
-        "text": "你吃什么了?",
-        "subText": "Nǐ chī  sheme le?",
-        "meaning": "밥 뭐 먹었니?",
-        "lang": "zh-CN"
-    },
-    {
-        "id": 11,
-        "type": "speech_recognition",
-        "inputType": "none",
-        "title": "Level 11",
-        "text": "ご飯食べましたか？",
-        "subText": "Gohan tabemashita ka?",
-        "meaning": "밥 먹었나요?",
-        "lang": "ja-JP"
-    }
-];
+// STAGES data is now loaded from stages.js
 
 const WRITING_PAD_CONFIG = { x: 240, y: 640, width: 800, height: 280 };
 
@@ -287,8 +54,16 @@ const ui = {
     done: null, reset: null,
     scalePanel: null, scaleSelect: null,
     dragPanel: null, pinyinSlider: null, pinyinVal: null,
-    hanjaSlider: null, hanjaVal: null
+    hanjaSlider: null, hanjaVal: null,
+    // Cheat System
+    cheatBtn: null, cheatPanel: null, cheatTableBody: null, cursorCoords: null, cheatSaveBtn: null,
+    // Level Nav
+    levelNav: null
 };
+
+let isCheatMode = false;
+let cheatBoxes = [];
+
 
 // --- Initialization ---
 
@@ -311,6 +86,7 @@ function initUI() {
     ui.pinyinVal = document.getElementById('pinyin-val');
     ui.hanjaSlider = document.getElementById('hanja-slider');
     ui.hanjaVal = document.getElementById('hanja-val');
+    ui.levelNav = document.getElementById('level-nav-sidebar');
 
     ui.prev.addEventListener('click', () => loadStage(currentStageIndex - 1));
     ui.next.addEventListener('click', () => loadStage(currentStageIndex + 1));
@@ -333,7 +109,32 @@ function initUI() {
             refreshDragDisplay();
         });
     }
+
+    initCheatSystem();
+    initLevelNav();
 }
+
+function initLevelNav() {
+    if (!ui.levelNav) return;
+    ui.levelNav.innerHTML = '';
+    STAGES.forEach((stage, index) => {
+        const btn = document.createElement('div');
+        btn.className = 'level-nav-item';
+        btn.textContent = index + 1;
+        btn.dataset.index = index;
+        btn.addEventListener('click', () => loadStage(index));
+        ui.levelNav.appendChild(btn);
+    });
+}
+
+function updateLevelNavVisual() {
+    if (!ui.levelNav) return;
+    const items = ui.levelNav.querySelectorAll('.level-nav-item');
+    items.forEach((item, idx) => {
+        item.classList.toggle('active', idx === currentStageIndex);
+    });
+}
+
 
 function initCanvas() {
     canvas = new fabric.Canvas('c', {
@@ -397,42 +198,70 @@ function loadStage(index) {
             if (stage.inputType === 'direct') updateActiveZoneVisual();
             if (stage.type === 'blink_pad') updateBlinkingHighlight();
         }
+
+        // Cheat System Refresh
+        if (typeof isCheatMode !== 'undefined' && isCheatMode) {
+            refreshCheatTable();
+            createCheatStageVisuals();
+        }
+
+        updateLevelNavVisual();
     });
 }
 
+
+
 function renderBackground(stage, callback) {
-    if (!stage.bgImage) {
-        if (callback) callback();
+    if (!stage || !stage.bgImage) {
+        canvas.setBackgroundImage(null, () => {
+            canvas.renderAll();
+            if (callback) callback();
+        });
         return;
     }
 
-    fabric.Image.fromURL(stage.bgImage, (img) => {
-        if (!img) {
-            console.error("Failed to load image:", stage.bgImage);
-            if (callback) callback();
+    const cleanPath = stage.bgImage.trim();
+    // Add cache buster to the image URL as well
+    const imgUrl = cleanPath + (cleanPath.includes('?') ? '&' : '?') + 't=' + new Date().getTime();
+    const scale = stage.bgScale || 1.0;
+
+    console.log("Attempting to load background:", imgUrl);
+
+    fabric.Image.fromURL(imgUrl, (img, isError) => {
+        if (isError || !img) {
+            console.error("Critical: Failed to load background image:", imgUrl);
+            // Fallback: try without cache buster if that failed
+            if (imgUrl.includes('?t=')) {
+                fabric.Image.fromURL(cleanPath, (img2) => {
+                    if (img2) setBg(img2);
+                    else if (callback) callback();
+                });
+            } else if (callback) callback();
             return;
         }
+
+        setBg(img);
+    });
+
+    function setBg(img) {
         img.set({
-            left: CONFIG.CANVAS_WIDTH / 2,
-            top: CONFIG.CANVAS_HEIGHT / 2,
             originX: 'center',
             originY: 'center',
+            left: CONFIG.CANVAS_WIDTH / 2,
+            top: CONFIG.CANVAS_HEIGHT / 2,
             selectable: false,
             evented: false
         });
-
-        // Set scale
-        const scale = stage.bgScale || 1.0;
         img.scale(scale);
 
-        canvas.add(img);
-        img.sendToBack();
-        canvas.renderAll();
-        if (callback) callback();
-    }, {
-        crossOrigin: 'anonymous'
-    });
+        canvas.setBackgroundImage(img, () => {
+            canvas.renderAll();
+            console.log("Background applied successfully");
+            if (callback) callback();
+        });
+    }
 }
+
 
 function cleanupTimers() {
     if (lastTimer) clearTimeout(lastTimer);
@@ -449,19 +278,58 @@ function renderWritingStage(stage) {
     const centerY = stage.targets[0].y + stage.targets[0].height / 2;
 
     if (stage.inputType === 'pad') {
-        canvas.add(new fabric.Rect({
-            left: WRITING_PAD_CONFIG.x, top: WRITING_PAD_CONFIG.y, width: WRITING_PAD_CONFIG.width, height: WRITING_PAD_CONFIG.height,
-            fill: '#F8FAFC', stroke: CONFIG.COLORS.border, strokeWidth: 2, rx: 24, ry: 24, selectable: false, evented: false
-        }));
+        const padBase = new fabric.Rect({
+            left: WRITING_PAD_CONFIG.x, top: WRITING_PAD_CONFIG.y,
+            width: WRITING_PAD_CONFIG.width, height: WRITING_PAD_CONFIG.height,
+            fill: stage.padColor || '#F8FAFC',
+            opacity: stage.padOpacity !== undefined ? parseFloat(stage.padOpacity) : 1.0,
+            stroke: CONFIG.COLORS.border, strokeWidth: 2, rx: 24, ry: 24,
+            selectable: false, name: 'writing-pad'
+        });
+
+        const closeBtn = new fabric.Group([
+            new fabric.Circle({ radius: 18, fill: '#94A3B8', originX: 'center', originY: 'center' }),
+            new fabric.Text('×', { fontSize: 24, fill: 'white', fontWeight: 900, originX: 'center', originY: 'center', top: -2 })
+        ], {
+            left: WRITING_PAD_CONFIG.x + WRITING_PAD_CONFIG.width - 30,
+            top: WRITING_PAD_CONFIG.y + 30,
+            originX: 'center',
+            originY: 'center',
+            hoverCursor: 'pointer',
+            name: 'close-pad-btn',
+            selectable: false,
+            evented: true
+        });
+
+        canvas.add(padBase);
+        canvas.add(closeBtn);
+
+        closeBtn.on('mousedown', (o) => {
+            padBase.set('visible', false);
+            closeBtn.set('visible', false);
+            canvas.isDrawingMode = false;
+            canvas.renderAll();
+            if (o.e) o.e.stopPropagation();
+        });
     }
 
     targetRects = [];
-    stage.targets.forEach(t => {
+    stage.targets.forEach((t, i) => {
         const rect = new fabric.Rect({
             left: t.x, top: t.y, width: t.width, height: t.height,
-            fill: CONFIG.COLORS.targetFill, stroke: CONFIG.COLORS.targetStroke, strokeWidth: 2, rx: 20, ry: 20, selectable: false, evented: false
+            fill: CONFIG.COLORS.targetFill, stroke: CONFIG.COLORS.targetStroke, strokeWidth: 2, rx: 20, ry: 20,
+            selectable: false, evented: true, name: `target-rect-${i}`
         });
+
+        // Target Index Number
+        const indexText = new fabric.Text((i + 1).toString(), {
+            left: t.x + 10, top: t.y + 10,
+            fontSize: 18, fontWeight: 800, fill: '#CBD5E1',
+            selectable: false, evented: false
+        });
+
         canvas.add(rect);
+        canvas.add(indexText);
         targetRects.push(rect);
     });
 
@@ -567,7 +435,17 @@ function renderDragStage(stage) {
                 fill: 'rgba(99, 102, 241, 0.05)', stroke: CONFIG.COLORS.accent,
                 strokeWidth: 2, strokeDashArray: [8, 4], rx: 12, ry: 12, originX: 'center', originY: 'center', selectable: false
             });
+
+            // Slot Index Number
+            const slotIndex = dropTargets.length + 1;
+            const indexText = new fabric.Text(slotIndex.toString(), {
+                left: x - 60, top: yBase - 150,
+                fontSize: 16, fontWeight: 800, fill: CONFIG.COLORS.accent,
+                selectable: false, evented: false
+            });
+
             canvas.add(slot);
+            canvas.add(indexText);
             dropTargets.push({ x: x, y: yBase - 120, char: token.pinyin, visualSlot: slot });
         } else {
             canvas.add(new fabric.Text(token.pinyin, {
@@ -626,7 +504,17 @@ function renderAlphabetStage(stage) {
                 left: t.x, top: t.y, width: 90, height: 90, fill: 'rgba(255,255,255,0.2)',
                 stroke: '#FFF', strokeWidth: 3, strokeDashArray: [10, 5], rx: 15, ry: 15, originX: 'center', originY: 'center', selectable: false
             });
+
+            // Slot Index Number
+            const slotIndex = dropTargets.length + 1;
+            const indexText = new fabric.Text(slotIndex.toString(), {
+                left: t.x - 35, top: t.y - 35,
+                fontSize: 16, fontWeight: 800, fill: '#FFF',
+                selectable: false, evented: false
+            });
+
             canvas.add(rs);
+            canvas.add(indexText);
             dropTargets.push({ x: t.x, y: t.y, char: t.char, visualSlot: rs });
         }
     });
@@ -662,17 +550,30 @@ function createDraggableAlphabetTile(char, x, y) {
 // --- Interaction Handlers ---
 
 function handleMouseDown(o) {
+    if (isCheatMode) return;
     if (currentStageIndex >= STAGES.length || STAGES[currentStageIndex].inputType === 'drag' || isMoving) return;
 
-    // Check if clicked on speaker
-    if (o.target && o.target.name === 'speaker-btn') return;
+    // Check if clicked on speaker or close button
+    if (o.target && (o.target.name === 'speaker-btn' || o.target.name === 'close-pad-btn')) return;
 
     const p = canvas.getPointer(o.e);
     const stage = STAGES[currentStageIndex];
     let canDraw = false;
 
     if (stage.inputType === 'pad') {
-        canDraw = p.x >= WRITING_PAD_CONFIG.x && p.x <= WRITING_PAD_CONFIG.x + WRITING_PAD_CONFIG.width &&
+        const padBase = canvas.getObjects().find(obj => obj.name === 'writing-pad');
+        const closeBtn = canvas.getObjects().find(obj => obj.name === 'close-pad-btn');
+
+        // Reopen pad if a target box is clicked
+        const clickedTarget = targetRects.some(rect => rect.containsPoint(p));
+        if (clickedTarget && padBase && !padBase.visible) {
+            padBase.set('visible', true);
+            if (closeBtn) closeBtn.set('visible', true);
+            canvas.renderAll();
+        }
+
+        canDraw = padBase && padBase.visible &&
+            p.x >= WRITING_PAD_CONFIG.x && p.x <= WRITING_PAD_CONFIG.x + WRITING_PAD_CONFIG.width &&
             p.y >= WRITING_PAD_CONFIG.y && p.y <= WRITING_PAD_CONFIG.y + WRITING_PAD_CONFIG.height;
     } else if (stage.inputType === 'direct' && activeSlotIndex < stage.targets.length) {
         const t = stage.targets[activeSlotIndex], w = t.width * expansionFactor, h = t.height * expansionFactor;
@@ -681,6 +582,7 @@ function handleMouseDown(o) {
     }
 
     if (canDraw) {
+        canvas.isDrawingMode = true;
         canvas.freeDrawingBrush.color = CONFIG.COLORS.text;
     } else {
         canvas.freeDrawingBrush.color = 'transparent';
@@ -1173,5 +1075,204 @@ function refreshDragDisplay() {
     if (stage.inputType === 'drag' && stage.type !== 'alphabet_drag') {
         canvas.clear();
         renderDragStage(stage);
+    }
+}
+// --- Cheat System Logic ---
+
+function initCheatSystem() {
+    ui.cheatBtn = document.getElementById('cheat-btn');
+    ui.cheatPanel = document.getElementById('cheat-panel');
+    ui.cheatTableBody = document.getElementById('cheat-table-body');
+    ui.cursorCoords = document.getElementById('cursor-coords');
+    ui.cheatSaveBtn = document.getElementById('cheat-save-btn');
+
+    if (!ui.cheatBtn) return;
+
+    ui.cheatBtn.addEventListener('click', toggleCheatMode);
+    ui.cheatSaveBtn.addEventListener('click', saveCheatData);
+
+    // Track mouse for coordinates
+    window.addEventListener('mousemove', (e) => {
+        if (!isCheatMode) return;
+        const p = canvas.getPointer(e);
+        ui.cursorCoords.textContent = `(${Math.round(p.x)}, ${Math.round(p.y)})`;
+    });
+}
+
+function toggleCheatMode() {
+    isCheatMode = !isCheatMode;
+    ui.cheatPanel.classList.toggle('hidden', !isCheatMode);
+    ui.cheatBtn.style.background = isCheatMode ? '#CBD5E1' : '#E2E8F0';
+
+    // Canvas settings for Cheat Mode
+    canvas.selection = isCheatMode;
+    canvas.isDrawingMode = !isCheatMode;
+    canvas.defaultCursor = isCheatMode ? 'default' : 'crosshair';
+
+    // Decouple objects from drawing mode interaction
+    canvas.forEachObject(obj => {
+        if (obj.name && obj.name.startsWith('cheat-box-')) {
+            obj.set({ selectable: isCheatMode, evented: isCheatMode });
+        }
+    });
+
+    if (isCheatMode) {
+        refreshCheatTable();
+        createCheatStageVisuals();
+    } else {
+        clearCheatVisuals();
+    }
+    canvas.renderAll();
+}
+
+function refreshCheatTable() {
+    const stage = STAGES[currentStageIndex];
+    if (!stage.targets) {
+        ui.cheatTableBody.innerHTML = '<tr><td colspan="5" style="text-align:center; opacity:0.5;">No targets for this stage</td></tr>';
+        return;
+    }
+
+    ui.cheatTableBody.innerHTML = '';
+    stage.targets.forEach((t, i) => {
+        const row = document.createElement('tr');
+        row.innerHTML = `
+            <td style="text-align:center; font-weight:800; color:var(--primary);">${i + 1}</td>
+            <td><input type="number" value="${Math.round(t.x)}" oninput="updateCheatTarget(${i}, 'x', this.value)"></td>
+            <td><input type="number" value="${Math.round(t.y)}" oninput="updateCheatTarget(${i}, 'y', this.value)"></td>
+            <td><input type="number" value="${Math.round(t.width || 0)}" oninput="updateCheatTarget(${i}, 'width', this.value)"></td>
+            <td><input type="number" value="${Math.round(t.height || 0)}" oninput="updateCheatTarget(${i}, 'height', this.value)"></td>
+        `;
+        ui.cheatTableBody.appendChild(row);
+    });
+}
+
+window.updateCheatTarget = (targetIdx, key, val) => {
+    const stage = STAGES[currentStageIndex];
+    if (!stage.targets || !stage.targets[targetIdx]) return;
+
+    stage.targets[targetIdx][key] = parseInt(val) || 0;
+
+    // Update visual box
+    if (cheatBoxes[targetIdx]) {
+        const t = stage.targets[targetIdx];
+        cheatBoxes[targetIdx].set({
+            left: t.x,
+            top: t.y,
+            width: t.width,
+            height: t.height,
+            scaleX: 1,
+            scaleY: 1
+        });
+        canvas.renderAll();
+    }
+};
+
+function createCheatStageVisuals() {
+    clearCheatVisuals();
+    const stage = STAGES[currentStageIndex];
+    if (!stage.targets) return;
+
+    stage.targets.forEach((t, i) => {
+        const rect = new fabric.Rect({
+            left: t.x,
+            top: t.y,
+            width: t.width || 100,
+            height: t.height || 100,
+            fill: 'rgba(22, 163, 74, 0.15)',
+            stroke: '#16A34A',
+            strokeWidth: 2,
+            strokeDashArray: [10, 5],
+            selectable: true,
+            evented: true,
+            name: `cheat-box-${i}`,
+            hasRotatingPoint: false,
+            transparentCorners: false,
+            cornerColor: '#16A34A',
+            cornerSize: 10
+        });
+
+        // Cheat Box Index Number
+        const text = new fabric.Text((i + 1).toString(), {
+            left: t.x + 10,
+            top: t.y + 10,
+            fontSize: 24,
+            fontWeight: 900,
+            fill: '#16A34A',
+            selectable: false,
+            evented: false,
+            name: `cheat-text-${i}`
+        });
+
+        // Update STAGES data when moving or scaling
+        const updateData = () => {
+            const scaledWidth = rect.width * rect.scaleX;
+            const scaledHeight = rect.height * rect.scaleY;
+            t.x = Math.round(rect.left);
+            t.y = Math.round(rect.top);
+            t.width = Math.round(scaledWidth);
+            t.height = Math.round(scaledHeight);
+
+            // Sync text position
+            text.set({
+                left: rect.left + 10,
+                top: rect.top + 10
+            });
+
+            // Sync to table if visible
+            refreshCheatTable();
+            canvas.renderAll();
+        };
+
+        rect.on('moving', updateData);
+        rect.on('scaling', updateData);
+
+        canvas.add(rect);
+        canvas.add(text);
+        cheatBoxes.push(rect);
+        cheatBoxes.push(text);
+    });
+    canvas.renderAll();
+}
+
+function clearCheatVisuals() {
+    cheatBoxes.forEach(box => canvas.remove(box));
+    cheatBoxes = [];
+    canvas.renderAll();
+}
+
+async function saveCheatData() {
+    const btn = ui.cheatSaveBtn;
+    const originalText = btn.textContent;
+    btn.textContent = 'SAVING...';
+    btn.disabled = true;
+
+    try {
+        const response = await fetch('http://localhost:3000/save', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify(STAGES)
+        });
+
+        if (response.ok) {
+            btn.style.background = '#059669';
+            btn.textContent = 'SAVED ✓';
+            setTimeout(() => {
+                btn.style.background = '#16A34A';
+                btn.textContent = originalText;
+                btn.disabled = false;
+                toggleCheatMode(); // Close panel after save
+            }, 1500);
+        } else {
+            throw new Error('Save failed');
+        }
+    } catch (err) {
+        alert('서버 저장 실패! run_server.bat가 실행 중인지 확인하세요.');
+        btn.textContent = 'ERROR';
+        btn.style.background = '#DC2626';
+        setTimeout(() => {
+            btn.style.background = '#16A34A';
+            btn.textContent = originalText;
+            btn.disabled = false;
+        }, 2000);
     }
 }

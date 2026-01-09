@@ -414,9 +414,13 @@
                 <h1 style="font-size: 32px; font-weight: 800;">Content Dashboard</h1>
                 <p style="color: var(--text-muted);">모든 레벨의 원고와 속성을 관리합니다.</p>
             </div>
-            <div style="display: flex; gap: 12px;">
+            <div style="display: flex; gap: 12px; align-items: center;">
+                <div id="save-status"
+                    style="font-size: 13px; font-weight: 700; color: #16A34A; opacity: 0; transition: opacity 0.3s;">
+                    Saved!</div>
                 <button class="btn-add" onclick="addNewStage()">+ 레벨 추가</button>
-                <button onclick="generateCode()">변경사항 적용 코드 생성</button>
+                <button onclick="saveToFilesystem()" style="background: #4F46E5;">저장 및 적용</button>
+                <button class="btn-secondary" onclick="generateCode()" style="font-size: 13px;">코드 보기</button>
             </div>
         </div>
 
@@ -449,6 +453,7 @@
     </div>
 
     <!-- Load the actual STAGES data for reading -->
+    <script src="js/stages.js"></script>
     <script src="js/app.js"></script>
     <script>
         // Password check logic
@@ -543,6 +548,26 @@
                             <div class="field-group" style="flex: 1;">
                                 <label class="field-label">텍스트 (Post)</label>
                                 <input type="text" value="${stage.sentence.post || ''}" onchange="updateSentence(${index}, 'post', this.value)">
+                            </div>
+                        </div>
+                    `;
+                }
+
+                if (stage.inputType === 'pad') {
+                    contentHTML += `
+                        <div style="display: flex; gap: 8px;">
+                            <div class="field-group" style="flex: 1;">
+                                <label class="field-label">Pad 불투명도</label>
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <input type="range" min="0" max="1" step="0.1" value="${stage.padOpacity !== undefined ? stage.padOpacity : 1.0}" oninput="this.nextElementSibling.value = this.value; updateStageFloat(${index}, 'padOpacity', this.value)" style="flex:1; margin-bottom:0;">
+                                    <output style="font-size: 12px; font-weight: 700; min-width: 24px;">${stage.padOpacity !== undefined ? stage.padOpacity : 1.0}</output>
+                                </div>
+                            </div>
+                            <div class="field-group" style="flex: 1;">
+                                <label class="field-label">Pad 배경색</label>
+                                <div style="display: flex; align-items: center; gap: 8px;">
+                                    <input type="color" value="${stage.padColor || '#F8FAFC'}" onchange="updateStage(${index}, 'padColor', this.value)" style="width: 100%; height: 53px; padding: 2px; border-radius: 8px; border: 1px solid var(--border); cursor: pointer;">
+                                </div>
                             </div>
                         </div>
                     `;
@@ -706,20 +731,41 @@
             document.getElementById('global-file-input').click();
         }
 
-        function handleFileSelect(event) {
+        async function handleFileSelect(event) {
             const file = event.target.files[0];
             if (!file || currentUploadIdx === -1) return;
 
-            // Browser security prevents full path, but we assume it's in images/
-            const fileName = file.name;
-            const relativePath = 'images/' + fileName;
+            const status = document.getElementById('save-status');
+            status.style.opacity = '1';
+            status.textContent = 'Uploading...';
 
-            updateStage(currentUploadIdx, 'bgImage', relativePath);
-            renderStages(); // Re-render to show update
+            try {
+                const response = await fetch('http://localhost:3000/upload', {
+                    method: 'POST',
+                    headers: {
+                        'x-file-name': encodeURIComponent(file.name)
+                    },
+                    body: file
+                });
 
-            // Reset input
-            event.target.value = '';
-            currentUploadIdx = -1;
+                if (response.ok) {
+                    const result = await response.json();
+                    updateStage(currentUploadIdx, 'bgImage', result.path);
+                    renderStages();
+                    status.textContent = '✓ Uploaded';
+                    setTimeout(() => { status.style.opacity = '0'; }, 2000);
+                } else {
+                    throw new Error('Upload failed');
+                }
+            } catch (err) {
+                alert('파일 업로드 실패! 서버(run_server.bat)가 실행 중인지 확인하세요.');
+                console.error('Upload failed:', err);
+                status.style.opacity = '0';
+            } finally {
+                // Reset input
+                event.target.value = '';
+                currentUploadIdx = -1;
+            }
         }
 
         function downloadImage(idx) {
@@ -798,7 +844,9 @@
                 inputType: 'pad',
                 title: "New Level",
                 sentence: { pre: "나는", post: "에 갑니다.", y: 400 },
-                targets: [{ x: 440, y: 340, width: 220, height: 120 }]
+                targets: [{ x: 440, y: 340, width: 220, height: 120 }],
+                padOpacity: 1.0,
+                padColor: "#F8FAFC"
             });
             renderStages();
         }
@@ -814,6 +862,28 @@
             const code = "const STAGES = " + JSON.stringify(localStages, null, 4) + ";";
             document.getElementById('code-area').value = code;
             document.getElementById('code-output-modal').style.display = 'flex';
+        }
+
+        async function saveToFilesystem() {
+            const status = document.getElementById('save-status');
+            try {
+                const response = await fetch('http://localhost:3000/save', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify(localStages)
+                });
+
+                if (response.ok) {
+                    status.style.opacity = '1';
+                    status.textContent = '✓ 저장 완료';
+                    setTimeout(() => { status.style.opacity = '0'; }, 2000);
+                } else {
+                    throw new Error('Server not running');
+                }
+            } catch (err) {
+                alert('서버가 실행 중이지 않습니다. run_server.bat를 실행해 주세요!');
+                console.error('Save failed:', err);
+            }
         }
 
         function copyCode() {

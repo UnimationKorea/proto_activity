@@ -1,0 +1,19 @@
+Windows PowerShell
+Copyright (C) Microsoft Corporation. All rights reserved.
+
+새로운 크로스 플랫폼 PowerShell 사용 https://aka.ms/pscore6
+
+PS C:\WINDOWS\system32> d:
+PS D:\> cd "D:\구몬on Issue\초기 기획 프롬프트용\proto_activity-main"
+PS D:\구몬on Issue\초기 기획 프롬프트용\proto_activity-main> node server.js
+-------------------------------------------
+Save Server running at http://localhost:3000
+Monitoring: D:\구몬on Issue\초기 기획 프롬프트용\proto_activity-main\js\stages.js
+-------------------------------------------
+[오후 4:43:41] Successfully saved stages to js/stages.js
+
+
+
+
+
+

@@ -22,6 +22,11 @@
 <body>
 
     <div id="activity-container">
+        <!-- Level Navigation Sidebar -->
+        <div id="level-nav-sidebar">
+            <!-- Dynamic Buttons will be injected here -->
+        </div>
+
         <!-- Navigation Header -->
         <div id="nav-header">
             <button id="btn-prev" class="nav-btn" aria-label="이전 스테이지">
@@ -92,10 +97,40 @@
                 완료 <span style="margin-left: 8px;">→</span>
             </button>
         </div>
+
+        <!-- Cheat Key System -->
+        <button id="cheat-btn">Cheat Key</button>
+        <div id="cheat-panel" class="hidden">
+            <div class="cheat-header">
+                <span class="cheat-title">(표 1) 빈칸 설정</span>
+                <span id="cursor-coords" class="cursor-coords">(0, 0)</span>
+            </div>
+            <table class="cheat-table">
+                <thead>
+                    <tr>
+                        <th>순서</th>
+                        <th>X</th>
+                        <th>Y</th>
+                        <th>W</th>
+                        <th>H</th>
+                    </tr>
+                </thead>
+                <tbody id="cheat-table-body">
+                    <!-- Dynamic Rows -->
+                </tbody>
+            </table>
+            <button class="btn-cheat-save" id="cheat-save-btn">SAVE</button>
+        </div>
     </div>
 
+
     <!-- Application Logic -->
-    <script src="js/app.js"></script>
+    <script>
+        // Use a timestamp to force the browser to load the latest version of stages.js and app.js
+        const timestamp = new Date().getTime();
+        document.write('<script src="js/stages.js?v=' + timestamp + '"><\/script>');
+        document.write('<script src="js/app.js?v=' + timestamp + '"><\/script>');
+    </script>
 </body>
 
 </html>
