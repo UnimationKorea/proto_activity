@@ -30,56 +30,236 @@ const CONFIG = {
 
 const STAGES = [
     {
-        id: 1, type: 'normal', inputType: 'pad', title: "Level 1",
-        sentence: { pre: "나는", post: "에 갑니다.", y: 400 },
-        targets: [{ x: 440, y: 340, width: 220, height: 120 }]
-    },
-    {
-        id: 2, type: 'normal', inputType: 'pad', title: "Level 2",
-        sentence: { pre: "나는", post: "에 갑니다.", y: 400 },
-        targets: [{ x: 440, y: 340, width: 140, height: 120 }, { x: 600, y: 340, width: 140, height: 120 }]
-    },
-    {
-        id: 3, type: 'hint_audio', inputType: 'direct', title: "Level 3",
-        sentence: { pre: "나는", post: "에 갑니다.", y: 400 },
-        targets: [{ x: 440, y: 340, width: 140, height: 120 }, { x: 600, y: 340, width: 140, height: 120 }],
-        hintText: ["학", "교"], audioWord: "학교", maxAudioPlays: 2
-    },
-    {
-        id: 5, type: 'blink_pad', inputType: 'pad', title: "Level 5",
-        sentence: { pre: "나는", post: "에 갑니다.", y: 400 },
-        targets: [{ x: 440, y: 340, width: 140, height: 120 }, { x: 600, y: 340, width: 140, height: 120 }]
-    },
-    {
-        id: 6, type: 'drag_drop', inputType: 'drag', title: "Level 6",
-        subText: "당신은 밥을 먹었습니까?",
-        tokens: [
-            { char: "你", pinyin: "Nǐ", fixed: true },
-            { char: "吃", pinyin: "chī", fixed: false },
-            { char: "饭", pinyin: "fàn", fixed: true },
-            { char: "了", pinyin: "le", fixed: false },
-            { char: "吗", pinyin: "ma", fixed: false }
-        ],
-        sourceItems: ["ma", "chī", "le"]
-    },
-    {
-        id: 7, type: 'alphabet_drag', inputType: 'drag', title: "Level 7",
-        bgImage: 'images/cruise ship.png',
-        feedback: { boy: 'images/boy-1.png', girl: 'images/girl-1.png' },
-        targets: [
-            { x: 297, y: 385, char: 'a', fixed: true },
-            { x: 454, y: 385, char: 'b', fixed: false },
-            { x: 607, y: 385, char: 'c', fixed: true },
-            { x: 758, y: 385, char: 'd', fixed: true },
-            { x: 934, y: 385, char: 'e', fixed: true },
-            { x: 1090, y: 385, char: 'f', fixed: true },
-            { x: 1215, y: 385, char: 'g', fixed: true }
-        ],
-        sourceItems: [
-            { char: 'h', x: 420, y: 750 },
-            { char: 'b', x: 640, y: 750 },
-            { char: 'r', x: 860, y: 750 }
+        "id": 1,
+        "type": "hint_audio",
+        "inputType": "pad",
+        "title": "Level 1",
+        "sentence": {
+            "pre": "나는",
+            "post": "에 갑니다.",
+            "y": 400
+        },
+        "targets": [
+            {
+                "x": 440,
+                "y": 340,
+                "width": 220,
+                "height": 120
+            }
         ]
+    },
+    {
+        "id": 2,
+        "type": "normal",
+        "inputType": "pad",
+        "title": "Level 2",
+        "sentence": {
+            "pre": "나는",
+            "post": "에 갑니다.",
+            "y": 400
+        },
+        "targets": [
+            {
+                "x": 440,
+                "y": 340,
+                "width": 140,
+                "height": 120
+            },
+            {
+                "x": 600,
+                "y": 340,
+                "width": 140,
+                "height": 120
+            }
+        ],
+        "bgImage": "images/20260105_193944.png"
+    },
+    {
+        "id": 3,
+        "type": "hint_audio",
+        "inputType": "direct",
+        "title": "Level 3",
+        "sentence": {
+            "pre": "나는",
+            "post": "에 갑니다.",
+            "y": 400
+        },
+        "targets": [
+            {
+                "x": 440,
+                "y": 340,
+                "width": 140,
+                "height": 120
+            },
+            {
+                "x": 600,
+                "y": 340,
+                "width": 140,
+                "height": 120
+            }
+        ],
+        "hintText": [
+            "학",
+            "교"
+        ],
+        "audioWord": "학교",
+        "maxAudioPlays": 2
+    },
+    {
+        "id": 5,
+        "type": "blink_pad",
+        "inputType": "pad",
+        "title": "Level 5",
+        "sentence": {
+            "pre": "나는",
+            "post": "에 갑니다.",
+            "y": 400
+        },
+        "targets": [
+            {
+                "x": 440,
+                "y": 340,
+                "width": 140,
+                "height": 120
+            },
+            {
+                "x": 600,
+                "y": 340,
+                "width": 140,
+                "height": 120
+            }
+        ]
+    },
+    {
+        "id": 6,
+        "type": "drag_drop",
+        "inputType": "drag",
+        "title": "Level 6",
+        "subText": "당신은 밥을 먹었습니까?",
+        "tokens": [
+            {
+                "char": "你",
+                "pinyin": "Nǐ",
+                "fixed": true
+            },
+            {
+                "char": "吃",
+                "pinyin": "chī",
+                "fixed": false
+            },
+            {
+                "char": "饭",
+                "pinyin": "fàn",
+                "fixed": true
+            },
+            {
+                "char": "了",
+                "pinyin": "le",
+                "fixed": false
+            },
+            {
+                "char": "吗",
+                "pinyin": "ma",
+                "fixed": false
+            }
+        ],
+        "sourceItems": [
+            "ma",
+            "chī",
+            "le"
+        ]
+    },
+    {
+        "id": 7,
+        "type": "alphabet_drag",
+        "inputType": "drag",
+        "title": "Level 7",
+        "bgImage": "images/cruise ship.png",
+        "feedback": {
+            "boy": "images/boy-1.png",
+            "girl": "images/girl-1.png"
+        },
+        "targets": [
+            {
+                "x": 297,
+                "y": 385,
+                "char": "a",
+                "fixed": true
+            },
+            {
+                "x": 454,
+                "y": 385,
+                "char": "b",
+                "fixed": false
+            },
+            {
+                "x": 607,
+                "y": 385,
+                "char": "c",
+                "fixed": true
+            },
+            {
+                "x": 758,
+                "y": 385,
+                "char": "d",
+                "fixed": true
+            },
+            {
+                "x": 934,
+                "y": 385,
+                "char": "e",
+                "fixed": true
+            },
+            {
+                "x": 1090,
+                "y": 385,
+                "char": "f",
+                "fixed": true
+            },
+            {
+                "x": 1215,
+                "y": 385,
+                "char": "g",
+                "fixed": true
+            }
+        ],
+        "sourceItems": [
+            {
+                "char": "h",
+                "x": 420,
+                "y": 750
+            },
+            {
+                "char": "b",
+                "x": 640,
+                "y": 750
+            },
+            {
+                "char": "r",
+                "x": 860,
+                "y": 750
+            }
+        ]
+    },
+    {
+        "id": 10,
+        "type": "speech_recognition",
+        "inputType": "none",
+        "title": "Level 10",
+        "text": "你吃什么了?",
+        "subText": "Nǐ chī  sheme le?",
+        "meaning": "밥 뭐 먹었니?",
+        "lang": "zh-CN"
+    },
+    {
+        "id": 11,
+        "type": "speech_recognition",
+        "inputType": "none",
+        "title": "Level 11",
+        "text": "ご飯食べましたか？",
+        "subText": "Gohan tabemashita ka?",
+        "meaning": "밥 먹었나요?",
+        "lang": "ja-JP"
     }
 ];
 
@@ -98,6 +278,9 @@ let expansionFactor = 1.2;
 let dropTargets = [];
 let targetRects = [];
 let blinkInterval = null;
+let recognition = null;
+let isRecording = false;
+let hasListened = false;
 
 const ui = {
     prev: null, next: null, indicator: null,
@@ -199,18 +382,56 @@ function loadStage(index) {
     ui.scalePanel.classList.toggle('hidden', stage.inputType !== 'direct');
     ui.dragPanel.classList.toggle('hidden', stage.inputType !== 'drag' || stage.type === 'alphabet_drag');
 
-    // Rendering
-    if (stage.type === 'alphabet_drag') {
-        renderAlphabetStage(stage);
-    } else if (stage.inputType === 'drag') {
-        renderDragStage(stage);
-    } else {
-        canvas.isDrawingMode = true;
-        renderWritingStage(stage);
-        if (stage.hintText) showHints(stage);
-        if (stage.inputType === 'direct') updateActiveZoneVisual();
-        if (stage.type === 'blink_pad') updateBlinkingHighlight();
+    // Rendering Background
+    renderBackground(stage, () => {
+        if (stage.type === 'speech_recognition') {
+            renderSpeechStage(stage);
+        } else if (stage.type === 'alphabet_drag') {
+            renderAlphabetStage(stage);
+        } else if (stage.inputType === 'drag') {
+            renderDragStage(stage);
+        } else {
+            canvas.isDrawingMode = true;
+            renderWritingStage(stage);
+            if (stage.hintText) showHints(stage);
+            if (stage.inputType === 'direct') updateActiveZoneVisual();
+            if (stage.type === 'blink_pad') updateBlinkingHighlight();
+        }
+    });
+}
+
+function renderBackground(stage, callback) {
+    if (!stage.bgImage) {
+        if (callback) callback();
+        return;
     }
+
+    fabric.Image.fromURL(stage.bgImage, (img) => {
+        if (!img) {
+            console.error("Failed to load image:", stage.bgImage);
+            if (callback) callback();
+            return;
+        }
+        img.set({
+            left: CONFIG.CANVAS_WIDTH / 2,
+            top: CONFIG.CANVAS_HEIGHT / 2,
+            originX: 'center',
+            originY: 'center',
+            selectable: false,
+            evented: false
+        });
+
+        // Set scale
+        const scale = stage.bgScale || 1.0;
+        img.scale(scale);
+
+        canvas.add(img);
+        img.sendToBack();
+        canvas.renderAll();
+        if (callback) callback();
+    }, {
+        crossOrigin: 'anonymous'
+    });
 }
 
 function cleanupTimers() {
@@ -284,20 +505,36 @@ function addSpeakerButton(stage) {
             speaker.animate('scaleX', 0.8, { duration: 100, onComplete: () => speaker.animate('scaleX', 1, { duration: 100 }) });
             speaker.animate('scaleY', 0.8, { duration: 100, onComplete: () => speaker.animate('scaleY', 1, { duration: 100 }) });
 
-            if (audioPlayCount >= stage.maxAudioPlays) {
+            if (audioPlayCount >= stage.maxAudioPlays && stage.maxAudioPlays) {
                 icon.set('fill', '#94A3B8');
                 speaker.set('opacity', 0.5);
                 speaker.set('hoverCursor', 'default');
+            }
+
+            if (stage.type === 'speech_recognition') {
+                hasListened = true;
+                const micBtn = canvas.getObjects().find(o => o.name === 'mic-btn');
+                if (micBtn) {
+                    micBtn.set({
+                        opacity: 1,
+                        hoverCursor: 'pointer',
+                        evented: true
+                    });
+                    // Highlight effect
+                    micBtn.item(0).set('stroke', CONFIG.COLORS.accent);
+                    micBtn.item(0).set('strokeWidth', 4);
+                    canvas.renderAll();
+                }
             }
             canvas.renderAll();
         }
     });
 }
 
-function playTTS(text) {
+function playTTS(text, lang = 'zh-CN') {
     const msg = new SpeechSynthesisUtterance(text);
-    msg.lang = 'ko-KR';
-    msg.rate = 0.9;
+    msg.lang = lang;
+    msg.rate = 0.85;
     window.speechSynthesis.speak(msg);
 }
 
@@ -368,13 +605,8 @@ function createDraggableTile(text, x, y) {
 }
 
 function renderAlphabetStage(stage) {
-    fabric.Image.fromURL(stage.bgImage, (bg) => {
-        bg.set({ left: 0, top: 0, selectable: false, evented: false });
-        bg.scaleToWidth(CONFIG.CANVAS_WIDTH);
-        canvas.add(bg);
-        bg.sendToBack();
-
-        // Feedback Sprites
+    // Feedback Sprites
+    if (stage.feedback) {
         fabric.Image.fromURL(stage.feedback.boy, (img) => {
             img.set({ left: 150, top: 820, opacity: 0, name: 'feedback-boy', originX: 'center', originY: 'center' });
             img.scale(1.4); canvas.add(img);
@@ -383,27 +615,27 @@ function renderAlphabetStage(stage) {
             img.set({ left: 1130, top: 820, opacity: 0, name: 'feedback-girl', originX: 'center', originY: 'center' });
             img.scale(1.4); canvas.add(img);
         });
+    }
 
-        stage.targets.forEach(t => {
-            if (t.fixed) {
-                const g = createStaticAlphabetTile(t.char, t.x, t.y);
-                canvas.add(g);
-            } else {
-                const rs = new fabric.Rect({
-                    left: t.x, top: t.y, width: 90, height: 90, fill: 'rgba(255,255,255,0.2)',
-                    stroke: '#FFF', strokeWidth: 3, strokeDashArray: [10, 5], rx: 15, ry: 15, originX: 'center', originY: 'center', selectable: false
-                });
-                canvas.add(rs);
-                dropTargets.push({ x: t.x, y: t.y, char: t.char, visualSlot: rs });
-            }
-        });
-
-        stage.sourceItems.forEach(item => {
-            const g = createDraggableAlphabetTile(item.char, item.x, item.y);
+    stage.targets.forEach(t => {
+        if (t.fixed) {
+            const g = createStaticAlphabetTile(t.char, t.x, t.y);
             canvas.add(g);
-        });
-        canvas.renderAll();
+        } else {
+            const rs = new fabric.Rect({
+                left: t.x, top: t.y, width: 90, height: 90, fill: 'rgba(255,255,255,0.2)',
+                stroke: '#FFF', strokeWidth: 3, strokeDashArray: [10, 5], rx: 15, ry: 15, originX: 'center', originY: 'center', selectable: false
+            });
+            canvas.add(rs);
+            dropTargets.push({ x: t.x, y: t.y, char: t.char, visualSlot: rs });
+        }
     });
+
+    stage.sourceItems.forEach(item => {
+        const g = createDraggableAlphabetTile(item.char, item.x, item.y);
+        canvas.add(g);
+    });
+    canvas.renderAll();
 }
 
 function createStaticAlphabetTile(char, x, y) {
@@ -689,11 +921,256 @@ function playEffectSound(freq) {
     osc.stop(ctx.currentTime + 0.5);
 }
 
+function renderSpeechStage(stage) {
+    const centerX = 640;
+    const centerY = 450;
+
+    hasListened = false;
+
+    // 1. Speaker Button (Top)
+    fabric.Image.fromURL('images/구몬 버튼(png)/듣기1.png', (img) => {
+        img.set({
+            left: centerX, top: centerY - 250,
+            originX: 'center', originY: 'center',
+            selectable: false, hoverCursor: 'pointer',
+            name: 'speaker-btn'
+        });
+        img.scale(1.5);
+        canvas.add(img);
+
+        img.on('mousedown', () => {
+            playTTS(stage.text, stage.lang);
+            img.animate('scaleX', 1.3, { duration: 100, onComplete: () => img.animate('scaleX', 1.5, { duration: 100 }) });
+
+            hasListened = true;
+            const micBtn = canvas.getObjects().find(o => o.name === 'mic-btn');
+            if (micBtn) {
+                micBtn.set({ opacity: 1, evented: true, hoverCursor: 'pointer' });
+                const ring = micBtn.item(0);
+                ring.set('stroke', CONFIG.COLORS.accent);
+                ring.set('strokeWidth', 3);
+                canvas.renderAll();
+            }
+        });
+    });
+
+    // 2. Display Sentence (Middle)
+    const mainText = new fabric.Text(stage.text, {
+        left: centerX, top: centerY, fontSize: 130, fontFamily: CONFIG.FONTS.chinese, fontWeight: 900, fill: CONFIG.COLORS.text, originX: 'center', originY: 'center', selectable: false, name: 'target-text'
+    });
+    canvas.add(mainText);
+
+    const subText = new fabric.Text(stage.subText, {
+        left: centerX, top: centerY + 100, fontSize: 44, fontFamily: CONFIG.FONTS.main, fontWeight: 700, fill: CONFIG.COLORS.accent, originX: 'center', originY: 'center', selectable: false
+    });
+    canvas.add(subText);
+
+    const meaningText = new fabric.Text(`"${stage.meaning}"`, {
+        left: centerX, top: centerY + 170, fontSize: 34, fontFamily: CONFIG.FONTS.main, fontWeight: 500, fill: CONFIG.COLORS.secondary, originX: 'center', originY: 'center', selectable: false
+    });
+    canvas.add(meaningText);
+
+    // 3. Mic Button (Bottom)
+    const micRing = new fabric.Circle({
+        radius: 70, fill: 'white', stroke: '#CBD5E1', strokeWidth: 2, originX: 'center', originY: 'center'
+    });
+
+    // Pulse ring for animation
+    const pulseRing = new fabric.Circle({
+        radius: 70, fill: 'rgba(99, 102, 241, 0.15)', originX: 'center', originY: 'center', opacity: 0, selectable: false, evented: false
+    });
+
+    fabric.Image.fromURL('images/구몬 버튼(png)/Btn_Recording1_Default1.png', (micImg) => {
+        micImg.set({ originX: 'center', originY: 'center', selectable: false });
+        micImg.scale(1.2);
+
+        const micBtn = new fabric.Group([micRing, micImg, pulseRing], {
+            left: centerX, top: centerY + 340, originX: 'center', originY: 'center', selectable: false, opacity: 0.4, evented: false, name: 'mic-btn'
+        });
+        canvas.add(micBtn);
+
+        micBtn.on('mousedown', () => {
+            if (!hasListened) {
+                alert("먼저 위의 '듣기' 버튼을 눌러 정답을 들어보세요!");
+                // Highlight speaker
+                const speaker = canvas.getObjects().find(o => o.name === 'speaker-btn');
+                if (speaker) {
+                    speaker.animate('scaleX', 1.2, { duration: 200, onComplete: () => speaker.animate('scaleX', 1, { duration: 100 }) });
+                }
+                return;
+            }
+            if (!isRecording) {
+                startRecording(micBtn, pulseRing, stage);
+            } else {
+                stopRecording();
+            }
+        });
+    });
+
+    // Pre-load boy animation sprite
+    fabric.Image.fromURL('images/boy-1.png', (img) => {
+        img.set({ left: 1100, top: 800, opacity: 0, name: 'feedback-boy-speech', originX: 'center', originY: 'center' });
+        img.scale(1.5);
+        canvas.add(img);
+    });
+}
+
+function startRecording(micBtn, pulseRing, stage) {
+    isRecording = true;
+    micBtn.item(0).set('stroke', CONFIG.COLORS.error); // Red ring when recording
+    micBtn.item(0).set('strokeWidth', 3);
+
+    // Animation
+    pulseRing.set('opacity', 1);
+    const animatePulse = () => {
+        if (!isRecording) return;
+        pulseRing.set({ scaleX: 1, scaleY: 1, opacity: 0.6 });
+        pulseRing.animate({ scaleX: 1.8, scaleY: 1.8, opacity: 0 }, {
+            duration: 1000,
+            onChange: canvas.renderAll.bind(canvas),
+            onComplete: animatePulse
+        });
+    };
+    animatePulse();
+
+    // Speech Recognition
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+        alert("Speech Recognition not supported in this browser.");
+        return;
+    }
+
+    recognition = new SpeechRecognition();
+    recognition.lang = stage.lang;
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.onresult = (event) => {
+        const result = event.results[0][0].transcript;
+        console.log("Recognized:", result);
+        evaluateSpeech(result, stage.text);
+    };
+
+    recognition.onend = () => {
+        if (isRecording) stopRecording();
+    };
+
+    recognition.onerror = (event) => {
+        console.error("Recognition Error:", event.error, event);
+
+        let msg = "음성 인식 중 오류가 발생했습니다.";
+        if (event.error === 'not-allowed') {
+            msg = "마이크 권한이 거부되었습니다. 브라우저 설정에서 마이크를 허용해 주세요.";
+        } else if (event.error === 'network') {
+            msg = "네트워크 연결 확인이 필요하거나, 현재 환경에서 음성 인식을 지원하지 않습니다.";
+        } else if (window.location.protocol === 'file:') {
+            msg = "로컬 파일(file://) 환경에서는 보안상 음성 인식이 제한될 수 있습니다. 서버 환경에서 실행해 주세요.";
+        }
+
+        alert(msg);
+        stopRecording();
+    };
+
+    recognition.start();
+}
+
+function stopRecording() {
+    isRecording = false;
+    const micBtn = canvas.getObjects().find(o => o.name === 'mic-btn');
+    if (micBtn) {
+        micBtn.item(0).set('stroke', CONFIG.COLORS.accent); // Back to blue/accent
+        micBtn.item(0).set('strokeWidth', 2);
+        micBtn.set('opacity', 1); // Keep it visible for retry
+        micBtn.set('evented', true); // Keep it enabled for retry
+        const pulse = micBtn.item(2);
+        pulse.set('opacity', 0);
+    }
+    if (recognition) recognition.stop();
+    canvas.renderAll();
+}
+
+function evaluateSpeech(recognized, target) {
+    console.log("Evaluating - Recognized:", recognized, "Target:", target);
+
+    // Basic cleanup of recognized text (remove punctuation and spaces)
+    const cleanR = recognized.replace(/\s|[.,\/#!$%\^&\*;:{}=\-_`~()？?！!]/g, "").toLowerCase();
+    const cleanT = target.replace(/\s|[.,\/#!$%\^&\*;:{}=\-_`~()？?！!]/g, "").toLowerCase();
+
+    console.log("Cleaned - Recognized:", cleanR, "Target:", cleanT);
+
+    const targetChars = cleanT.split("");
+    const recognizedChars = cleanR.split("");
+
+    const centerX = 640;
+    const centerY = 450;
+
+    // Remove original text and ANY previous re-rendered chars
+    canvas.getObjects().forEach(o => {
+        if (o.name === 'target-text' || o.name === 'eval-char') {
+            canvas.remove(o);
+        }
+    });
+
+    const charWidth = 130;
+    const totalW = targetChars.length * charWidth;
+    const startX = centerX - totalW / 2 + charWidth / 2;
+
+    targetChars.forEach((char, i) => {
+        // Find if this character exists in the recognized string
+        const isCorrect = recognizedChars.includes(char);
+        const color = isCorrect ? CONFIG.COLORS.success : CONFIG.COLORS.error;
+
+        const t = new fabric.Text(char, {
+            left: startX + i * charWidth,
+            top: centerY,
+            fontSize: 130,
+            fontFamily: CONFIG.FONTS.chinese,
+            fontWeight: 900,
+            fill: color,
+            originX: 'center',
+            originY: 'center',
+            selectable: false,
+            name: 'eval-char'
+        });
+        canvas.add(t);
+
+        t.animate('scaleX', 1.1, {
+            duration: 200,
+            onComplete: () => t.animate('scaleX', 1, { duration: 200 })
+        });
+    });
+
+    if (cleanR === cleanT) {
+        createFireworks(640, 450);
+        playEffectSound(600);
+        showSpeechFeedback('correct');
+    } else {
+        playEffectSound(300);
+        // Add a small visual hint or console message to help debugging
+        console.log("Speech mismatch. If it sounds correct, check for subtle encoding or character differences.");
+    }
+
+    canvas.renderAll();
+}
+
+function showSpeechFeedback(type) {
+    if (type === 'correct') {
+        const boy = canvas.getObjects().find(o => o.name === 'feedback-boy-speech');
+        if (boy) {
+            boy.set('opacity', 1);
+            boy.animate({ top: 680 }, {
+                duration: 600, easing: fabric.util.ease.easeOutBack,
+                onComplete: () => {
+                    setTimeout(() => boy.animate({ top: 800, opacity: 0 }, { duration: 600 }), 2000);
+                }
+            });
+        }
+    }
+}
+
 function refreshDragDisplay() {
-    // Re-render only if current stage is drag_drop
     const stage = STAGES[currentStageIndex];
     if (stage.inputType === 'drag' && stage.type !== 'alphabet_drag') {
-        const savedObjs = canvas.getObjects().filter(o => o.data); // Keep draggable tiles
         canvas.clear();
         renderDragStage(stage);
     }

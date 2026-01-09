@@ -1,0 +1,832 @@
+<!DOCTYPE html>
+<html lang="ko">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>구몬 학습 | 콘텐츠 대시보드</title>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+KR:wght@300;400;500;700;900&display=swap"
+        rel="stylesheet">
+    <style>
+        :root {
+            --primary: #6366F1;
+            --primary-hover: #4F46E5;
+            --primary-light: #EEF2FF;
+            --bg-main: #F8FAFC;
+            --bg-card: #FFFFFF;
+            --text-main: #1E293B;
+            --text-muted: #64748B;
+            --border: #E2E8F0;
+            --border-hover: #CBD5E1;
+            --radius-xl: 32px;
+            --radius-lg: 20px;
+            --radius-md: 12px;
+            --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.05);
+            --shadow-premium: 0 20px 40px -8px rgba(99, 102, 241, 0.12);
+        }
+
+        body {
+            font-family: 'Inter', 'Noto Sans KR', sans-serif;
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            margin: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            min-height: 100vh;
+            padding: 60px 40px;
+            line-height: 1.6;
+            letter-spacing: -0.015em;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        h1,
+        h2,
+        h3,
+        h4 {
+            letter-spacing: -0.03em;
+            line-height: 1.2;
+            margin: 0;
+        }
+
+        #login-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(248, 250, 252, 0.98);
+            backdrop-filter: blur(20px);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .login-card {
+            background: white;
+            padding: 56px;
+            border-radius: var(--radius-xl);
+            box-shadow: var(--shadow-premium);
+            text-align: center;
+            width: 440px;
+            border: 1px solid var(--border);
+        }
+
+        .login-card h2 {
+            font-size: 28px;
+            font-weight: 800;
+            margin-bottom: 12px;
+            color: var(--text-main);
+        }
+
+        input[type="password"],
+        input[type="text"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 16px 20px;
+            border: 1px solid var(--border);
+            border-radius: var(--radius-md);
+            margin-bottom: 20px;
+            font-size: 15px;
+            font-weight: 600;
+            outline: none;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            background: #FFFFFF;
+            color: var(--text-main);
+            letter-spacing: -0.01em;
+        }
+
+        input:focus,
+        select:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px var(--primary-light);
+            background: #FFFFFF;
+            transform: translateY(-1px);
+        }
+
+        button {
+            padding: 16px 32px;
+            background: var(--primary);
+            color: white;
+            border: none;
+            border-radius: var(--radius-md);
+            font-size: 15px;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            letter-spacing: -0.01em;
+        }
+
+        button:hover {
+            background: var(--primary-hover);
+            transform: translateY(-2px);
+            box-shadow: 0 12px 24px -6px rgba(99, 102, 241, 0.5);
+        }
+
+        button:active {
+            transform: translateY(0);
+        }
+
+        #dashboard-content {
+            width: 100%;
+            max-width: 1600px;
+            display: none;
+            animation: fadeIn 0.8s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-end;
+            margin-bottom: 72px;
+            border-bottom: 1px solid var(--border);
+            padding-bottom: 40px;
+        }
+
+        .header h1 {
+            font-size: 48px;
+            font-weight: 900;
+            color: var(--text-main);
+            margin-bottom: 12px;
+            letter-spacing: -0.04em;
+        }
+
+        .header p {
+            color: var(--text-muted);
+            font-size: 20px;
+            font-weight: 500;
+            letter-spacing: -0.02em;
+        }
+
+        .stage-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(480px, 1fr));
+            gap: 40px;
+        }
+
+        .stage-card {
+            background: white;
+            padding: 48px;
+            border-radius: var(--radius-lg);
+            border: 1px solid var(--border);
+            box-shadow: var(--shadow);
+            transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .stage-card:hover {
+            transform: translateY(-12px) scale(1.02);
+            box-shadow: var(--shadow-premium);
+            border-color: var(--primary-light);
+        }
+
+        .stage-card h3 {
+            font-size: 24px;
+            font-weight: 900;
+            margin-bottom: 32px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-bottom: 24px;
+            border-bottom: 1px solid var(--bg-main);
+        }
+
+        .tag {
+            font-size: 12px;
+            background: var(--primary-light);
+            padding: 6px 14px;
+            border-radius: 99px;
+            color: var(--primary);
+            font-weight: 800;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .field-group {
+            margin-bottom: 20px;
+        }
+
+        .field-label {
+            font-size: 13px;
+            font-weight: 800;
+            color: var(--text-muted);
+            margin-bottom: 8px;
+            display: block;
+            text-transform: uppercase;
+            letter-spacing: 0.05em;
+        }
+
+        .targets-list {
+            background: var(--bg-main);
+            padding: 20px;
+            border-radius: var(--radius-md);
+            margin-top: 12px;
+            border: 1px solid var(--border);
+        }
+
+        .target-item {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr auto;
+            gap: 12px;
+            margin-bottom: 12px;
+            align-items: center;
+        }
+
+        .target-item input {
+            margin-bottom: 0;
+            padding: 10px;
+            font-size: 13px;
+            border-color: var(--border);
+        }
+
+        .actions {
+            margin-top: 64px;
+            display: flex;
+            gap: 20px;
+            justify-content: center;
+            padding-top: 40px;
+            border-top: 1px solid var(--border);
+        }
+
+        .btn-delete {
+            background: #FFF1F2;
+            color: #E11D48;
+            font-weight: 700;
+            border: 1px solid #FFE4E6;
+        }
+
+        .btn-delete:hover {
+            background: #E11D48;
+            color: white;
+            box-shadow: 0 10px 20px -5px rgba(225, 29, 72, 0.4);
+        }
+
+        .btn-add {
+            background: #F0FDF4;
+            color: #16A34A;
+            border: 1px solid #DCFCE7;
+        }
+
+        .btn-add:hover {
+            background: #16A34A;
+            color: white;
+            box-shadow: 0 10px 20px -5px rgba(22, 163, 74, 0.4);
+        }
+
+        .btn-secondary {
+            background: white;
+            color: var(--text-main);
+            border: 1px solid var(--border);
+        }
+
+        .btn-secondary:hover {
+            background: var(--bg-main);
+            color: var(--text-main);
+            border-color: var(--border-hover);
+        }
+
+        .btn-upload {
+            background: #EFF6FF;
+            color: #3B82F6;
+            border: 1px solid #DBEAFE;
+        }
+
+        .btn-upload:hover {
+            background: #3B82F6;
+            color: white;
+            box-shadow: 0 10px 20px -5px rgba(59, 130, 246, 0.4);
+        }
+
+        #code-output-modal {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(15, 23, 42, 0.8);
+            backdrop-filter: blur(8px);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+            padding: 40px;
+        }
+
+        .modal-content {
+            background: white;
+            padding: 48px;
+            border-radius: var(--radius-xl);
+            width: 100%;
+            max-width: 1000px;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 40px 100px rgba(0, 0, 0, 0.5);
+            animation: modalPop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+        }
+
+        @keyframes modalPop {
+            from {
+                opacity: 0;
+                transform: scale(0.9) translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: scale(1) translateY(0);
+            }
+        }
+
+        textarea#code-area {
+            flex: 1;
+            font-family: 'JetBrains Mono', 'Fira Code', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            padding: 24px;
+            border-radius: var(--radius-md);
+            border: 1px solid var(--border);
+            margin-bottom: 32px;
+            background: #F8FAFC;
+            color: #334155;
+            white-space: pre;
+            overflow: auto;
+            resize: none;
+        }
+
+        .btn-copy {
+            background: var(--primary);
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background: var(--bg-main);
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background: var(--border);
+            border-radius: 99px;
+        }
+
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--border-hover);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="login-overlay">
+        <div class="login-card">
+            <h2>대시보드 접속</h2>
+            <p style="color: var(--text-muted); margin-bottom: 24px;">Password를 입력하세요.</p>
+            <input type="password" id="password-input" placeholder="Password">
+            <button onclick="checkPassword()">Enter</button>
+        </div>
+    </div>
+
+    <div id="dashboard-content">
+        <div class="header">
+            <div>
+                <h1 style="font-size: 32px; font-weight: 800;">Content Dashboard</h1>
+                <p style="color: var(--text-muted);">모든 레벨의 원고와 속성을 관리합니다.</p>
+            </div>
+            <div style="display: flex; gap: 12px;">
+                <button class="btn-add" onclick="addNewStage()">+ 레벨 추가</button>
+                <button onclick="generateCode()">변경사항 적용 코드 생성</button>
+            </div>
+        </div>
+
+        <div id="stage-list" class="stage-list">
+            <!-- Stages will be populated here -->
+        </div>
+
+        <div class="actions">
+            <!-- Global actions -->
+        </div>
+    </div>
+
+    <!-- Hidden File Input -->
+    <input type="file" id="global-file-input" accept="image/*" style="display: none;"
+        onchange="handleFileSelect(event)">
+
+    <!-- Modal for generated code -->
+    <div id="code-output-modal" onclick="closeModal(event)">
+        <div class="modal-content" onclick="event.stopPropagation()">
+            <h2 style="margin-bottom: 20px;">생성된 STAGES 코드</h2>
+            <p style="margin-bottom: 16px; color: var(--text-muted);">아래 코드를 복사하여 <b>js/app.js</b>의
+                <code>const STAGES = [...]</code> 부분을 교체하세요.
+            </p>
+            <textarea id="code-area" readonly></textarea>
+            <div style="display: flex; gap: 12px;">
+                <button class="btn-copy" onclick="copyCode()">코드 복사</button>
+                <button onclick="closeModal()">닫기</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Load the actual STAGES data for reading -->
+    <script src="js/app.js"></script>
+    <script>
+        // Password check logic
+        function checkPassword() {
+            const input = document.getElementById('password-input').value;
+            if (input === 'uni01') {
+                document.getElementById('login-overlay').style.display = 'none';
+                document.getElementById('dashboard-content').style.display = 'block';
+                initDashboard();
+            } else {
+                alert('비밀번호가 올바르지 않습니다.');
+            }
+        }
+
+        // Local copy of STAGES to work with
+        let localStages = [];
+
+        function initDashboard() {
+            // STAGES should be available from app.js
+            localStages = JSON.parse(JSON.stringify(STAGES));
+            renderStages();
+        }
+
+        function renderStages() {
+            const container = document.getElementById('stage-list');
+            container.innerHTML = '';
+
+            localStages.forEach((stage, index) => {
+                const card = document.createElement('div');
+                card.className = 'stage-card';
+
+                let contentHTML = `
+                    <h3>
+                        <span>Level ${stage.id}</span>
+                        <span class="tag">${stage.type}</span>
+                    </h3>
+                    
+                    <div class="field-group">
+                        <label class="field-label">타이틀</label>
+                        <input type="text" value="${stage.title || ''}" onchange="updateStage(${index}, 'title', this.value)">
+                    </div>
+
+                    <div class="field-group">
+                        <label class="field-label">타입</label>
+                        <select onchange="updateStage(${index}, 'type', this.value)">
+                            <option value="normal" ${stage.type === 'normal' ? 'selected' : ''}>Normal (Handwriting Pad)</option>
+                            <option value="hint_audio" ${stage.type === 'hint_audio' ? 'selected' : ''}>Hint Audio</option>
+                            <option value="blink_pad" ${stage.type === 'blink_pad' ? 'selected' : ''}>Blink Pad</option>
+                            <option value="drag_drop" ${stage.type === 'drag_drop' ? 'selected' : ''}>Drag & Drop (Chinese)</option>
+                            <option value="alphabet_drag" ${stage.type === 'alphabet_drag' ? 'selected' : ''}>Alphabet Drag</option>
+                            <option value="speech_recognition" ${stage.type === 'speech_recognition' ? 'selected' : ''}>Speech Recognition</option>
+                        </select>
+                    </div>
+
+                    <div class="field-group">
+                        <label class="field-label">입력 방식</label>
+                        <select onchange="updateStage(${index}, 'inputType', this.value)">
+                            <option value="pad" ${stage.inputType === 'pad' ? 'selected' : ''}>Pad (Bottom)</option>
+                            <option value="direct" ${stage.inputType === 'direct' ? 'selected' : ''}>Direct (On Box)</option>
+                            <option value="drag" ${stage.inputType === 'drag' ? 'selected' : ''}>Drag</option>
+                            <option value="none" ${stage.inputType === 'none' ? 'selected' : ''}>None (Speech)</option>
+                        </select>
+                    </div>
+
+                    <div style="display: flex; gap: 8px;">
+                        <div class="field-group" style="flex: 2;">
+                            <label class="field-label">배경 이미지 (png)</label>
+                            <div style="display: flex; gap: 8px;">
+                                <input type="text" value="${stage.bgImage || ''}" oninput="updateStage(${index}, 'bgImage', this.value)" placeholder="images/bg.png" style="margin-bottom:0;">
+                                <button type="button" class="btn-secondary btn-upload" style="padding: 10px; height: 53px;" onclick="triggerUpload(${index})" title="업로드">
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="pointer-events: none;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v4"></path><polyline points="17 8 12 3 7 8"></polyline><line x1="12" y1="3" x2="12" y2="15"></line></svg>
+                                </button>
+                                <button type="button" class="btn-secondary btn-download" style="padding: 10px; height: 53px;" onclick="downloadImage(${index})" title="다운로드" ${!stage.bgImage ? 'disabled' : ''}>
+                                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" style="pointer-events: none;"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+                                </button>
+                            </div>
+                        </div>
+                        <div class="field-group" style="flex: 1;">
+                            <label class="field-label">배경 스케일</label>
+                            <input type="number" step="0.1" value="${stage.bgScale || 1.0}" onchange="updateStageFloat(${index}, 'bgScale', this.value)">
+                        </div>
+                    </div>
+                `;
+
+                if (stage.sentence) {
+                    contentHTML += `
+                        <div style="display: flex; gap: 8px;">
+                            <div class="field-group" style="flex: 1;">
+                                <label class="field-label">텍스트 (Pre)</label>
+                                <input type="text" value="${stage.sentence.pre || ''}" onchange="updateSentence(${index}, 'pre', this.value)">
+                            </div>
+                            <div class="field-group" style="flex: 1;">
+                                <label class="field-label">텍스트 (Post)</label>
+                                <input type="text" value="${stage.sentence.post || ''}" onchange="updateSentence(${index}, 'post', this.value)">
+                            </div>
+                        </div>
+                    `;
+                }
+
+                if (stage.text !== undefined) {
+                    contentHTML += `
+                        <div class="field-group">
+                            <label class="field-label">메인 텍스트</label>
+                            <input type="text" value="${stage.text || ''}" onchange="updateStage(${index}, 'text', this.value)">
+                        </div>
+                    `;
+                }
+
+                if (stage.subText !== undefined) {
+                    contentHTML += `
+                        <div class="field-group">
+                            <label class="field-label">서브 텍스트 (Pinyin/Guide)</label>
+                            <input type="text" value="${stage.subText || ''}" onchange="updateStage(${index}, 'subText', this.value)">
+                        </div>
+                    `;
+                }
+
+                if (stage.meaning !== undefined) {
+                    contentHTML += `
+                        <div class="field-group">
+                            <label class="field-label">뜻/의미</label>
+                            <input type="text" value="${stage.meaning || ''}" onchange="updateStage(${index}, 'meaning', this.value)">
+                        </div>
+                    `;
+                }
+
+                if (stage.hintText) {
+                    contentHTML += `
+                        <div class="field-group">
+                            <label class="field-label">힌트 텍스트 (쉼표 구분)</label>
+                            <input type="text" value="${stage.hintText.join(',')}" onchange="updateArray(${index}, 'hintText', this.value)">
+                        </div>
+                    `;
+                }
+
+                if (stage.audioWord !== undefined) {
+                    contentHTML += `
+                        <div style="display: flex; gap: 8px;">
+                            <div class="field-group" style="flex: 2;">
+                                <label class="field-label">오디오 단어</label>
+                                <input type="text" value="${stage.audioWord}" onchange="updateStage(${index}, 'audioWord', this.value)">
+                            </div>
+                            <div class="field-group" style="flex: 1;">
+                                <label class="field-label">최대 재생수</label>
+                                <input type="number" value="${stage.maxAudioPlays || 0}" onchange="updateStageInt(${index}, 'maxAudioPlays', this.value)">
+                            </div>
+                        </div>
+                    `;
+                }
+
+                if (stage.lang) {
+                    contentHTML += `
+                        <div class="field-group">
+                            <label class="field-label">언어 코드 (lang)</label>
+                            <input type="text" value="${stage.lang}" onchange="updateStage(${index}, 'lang', this.value)" placeholder="zh-CN, ja-JP">
+                        </div>
+                    `;
+                }
+
+                if (stage.tokens) {
+                    contentHTML += `
+                        <div class="field-group">
+                            <label class="field-label">토큰 설정 (Hanja, Pinyin, Fixed)</label>
+                            <div class="targets-list">
+                                ${stage.tokens.map((tok, ti) => `
+                                    <div style="display: grid; grid-template-columns: 1fr 1fr auto auto; gap: 4px; margin-bottom: 4px;">
+                                        <input type="text" value="${tok.char}" onchange="updateToken(${index}, ${ti}, 'char', this.value)" placeholder="Char">
+                                        <input type="text" value="${tok.pinyin}" onchange="updateToken(${index}, ${ti}, 'pinyin', this.value)" placeholder="Pinyin">
+                                        <label style="font-size: 10px; display:flex; align-items:center; gap:2px;"><input type="checkbox" ${tok.fixed ? 'checked' : ''} onchange="updateToken(${index}, ${ti}, 'fixed', this.checked)"> 고정</label>
+                                        <button class="btn-delete" style="padding: 2px 6px;" onclick="removeToken(${index}, ${ti})">×</button>
+                                    </div>
+                                `).join('')}
+                                <button onclick="addToken(${index})" style="width: 100%; margin-top: 4px; font-size: 11px; padding: 4px;">+ 토큰 추가</button>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                if (stage.targets) {
+                    contentHTML += `
+                        <div class="field-group">
+                            <label class="field-label">빈칸/타겟 설정 (X, Y, W/Char, H/Fixed)</label>
+                            <div class="targets-list" id="targets-${index}">
+                                ${stage.targets.map((t, ti) => `
+                                    <div class="target-item">
+                                        <input type="number" value="${t.x}" onchange="updateTarget(${index}, ${ti}, 'x', this.value)" title="X">
+                                        <input type="number" value="${t.y}" onchange="updateTarget(${index}, ${ti}, 'y', this.value)" title="Y">
+                                        ${t.width !== undefined ? `
+                                            <input type="number" value="${t.width}" onchange="updateTarget(${index}, ${ti}, 'width', this.value)" title="Width">
+                                            <input type="number" value="${t.height}" onchange="updateTarget(${index}, ${ti}, 'height', this.value)" title="Height">
+                                        ` : `
+                                            <input type="text" value="${t.char || ''}" onchange="updateTarget(${index}, ${ti}, 'char', this.value)" title="Char">
+                                            <label style="font-size: 10px; display:flex; align-items:center; gap:2px;"><input type="checkbox" ${t.fixed ? 'checked' : ''} onchange="updateTarget(${index}, ${ti}, 'fixed', this.checked)"> 고정</label>
+                                        `}
+                                        <button class="btn-delete" style="padding: 4px 8px; font-size: 10px;" onclick="removeTarget(${index}, ${ti})">×</button>
+                                    </div>
+                                `).join('')}
+                                <button onclick="addTarget(${index})" style="width: 100%; margin-top: 8px; font-size: 12px; padding: 6px;">+ 타겟 추가</button>
+                            </div>
+                        </div>
+                    `;
+                }
+
+                if (stage.sourceItems) {
+                    const isComplex = typeof stage.sourceItems[0] === 'object';
+                    contentHTML += `
+                        <div class="field-group">
+                            <label class="field-label">소스 아이템 (Drag용 ${isComplex ? '- JSON' : '- 쉼표구분'})</label>
+                            <textarea onchange="updateSourceItems(${index}, this.value)" style="width:100%; height:80px; font-size:12px; padding:8px; border-radius:8px; border:1px solid var(--border);">${isComplex ? JSON.stringify(stage.sourceItems, null, 2) : stage.sourceItems.join(', ')}</textarea>
+                        </div>
+                    `;
+                }
+
+                contentHTML += `
+                    <div style="margin-top: 20px; text-align: right;">
+                        <button class="btn-delete" style="font-size: 13px;" onclick="deleteStage(${index})">이 레벨 삭제</button>
+                    </div>
+                `;
+
+                card.innerHTML = contentHTML;
+                container.appendChild(card);
+            });
+        }
+
+        // Update functions
+        function updateStage(idx, key, val) {
+            localStages[idx][key] = val;
+            if (key === 'id') localStages[idx][key] = parseInt(val);
+
+            // Re-check background image button status
+            if (key === 'bgImage') {
+                const card = document.querySelectorAll('.stage-card')[idx];
+                if (card) {
+                    const btn = card.querySelector('.btn-download');
+                    if (btn) btn.disabled = !val;
+                }
+            }
+        }
+
+        function updateStageInt(idx, key, val) {
+            localStages[idx][key] = parseInt(val);
+        }
+
+        function updateArray(idx, key, val) {
+            localStages[idx][key] = val.split(',').map(s => s.trim());
+        }
+
+        function updateStageFloat(idx, key, val) {
+            localStages[idx][key] = parseFloat(val);
+        }
+
+        let currentUploadIdx = -1;
+        function triggerUpload(idx) {
+            currentUploadIdx = idx;
+            document.getElementById('global-file-input').click();
+        }
+
+        function handleFileSelect(event) {
+            const file = event.target.files[0];
+            if (!file || currentUploadIdx === -1) return;
+
+            // Browser security prevents full path, but we assume it's in images/
+            const fileName = file.name;
+            const relativePath = 'images/' + fileName;
+
+            updateStage(currentUploadIdx, 'bgImage', relativePath);
+            renderStages(); // Re-render to show update
+
+            // Reset input
+            event.target.value = '';
+            currentUploadIdx = -1;
+        }
+
+        function downloadImage(idx) {
+            const stage = localStages[idx];
+            if (!stage || !stage.bgImage) {
+                alert('이미지 경로가 없습니다.');
+                return;
+            }
+            const path = stage.bgImage;
+            console.log('Attempting download:', path);
+
+            // Create link synchronously to ensure it's a "user-triggered" action
+            const link = document.createElement('a');
+            link.href = path;
+            link.download = path.split('/').pop().split('?')[0];
+            link.target = '_blank';
+
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+
+            // Provide a small hint since downloads can be silent
+            // alert('다운로드를 시도했습니다: ' + path);
+        }
+
+        function updateSentence(idx, key, val) {
+            if (!localStages[idx].sentence) localStages[idx].sentence = {};
+            localStages[idx].sentence[key] = val;
+        }
+
+        function updateTarget(idx, targetIdx, key, val) {
+            localStages[idx].targets[targetIdx][key] = (key === 'char' || key === 'fixed') ? val : parseInt(val);
+        }
+
+        function updateToken(idx, tokIdx, key, val) {
+            localStages[idx].tokens[tokIdx][key] = (key === 'fixed') ? val : val;
+        }
+
+        function addToken(idx) {
+            if (!localStages[idx].tokens) localStages[idx].tokens = [];
+            localStages[idx].tokens.push({ char: "新", pinyin: "Xīn", fixed: false });
+            renderStages();
+        }
+
+        function removeToken(idx, tokIdx) {
+            localStages[idx].tokens.splice(tokIdx, 1);
+            renderStages();
+        }
+
+        function updateSourceItems(idx, val) {
+            try {
+                // Try JSON first
+                localStages[idx].sourceItems = JSON.parse(val);
+            } catch (e) {
+                // Fallback to comma split
+                localStages[idx].sourceItems = val.split(',').map(s => s.trim());
+            }
+        }
+
+        function addTarget(idx) {
+            if (!localStages[idx].targets) localStages[idx].targets = [];
+            localStages[idx].targets.push({ x: 400, y: 340, width: 140, height: 120 });
+            renderStages();
+        }
+
+        function removeTarget(idx, targetIdx) {
+            localStages[idx].targets.splice(targetIdx, 1);
+            renderStages();
+        }
+
+        function addNewStage() {
+            const newId = localStages.length > 0 ? Math.max(...localStages.map(s => s.id)) + 1 : 1;
+            localStages.push({
+                id: newId,
+                type: 'normal',
+                inputType: 'pad',
+                title: "New Level",
+                sentence: { pre: "나는", post: "에 갑니다.", y: 400 },
+                targets: [{ x: 440, y: 340, width: 220, height: 120 }]
+            });
+            renderStages();
+        }
+
+        function deleteStage(idx) {
+            if (confirm('정말 삭제하시겠습니까?')) {
+                localStages.splice(idx, 1);
+                renderStages();
+            }
+        }
+
+        function generateCode() {
+            const code = "const STAGES = " + JSON.stringify(localStages, null, 4) + ";";
+            document.getElementById('code-area').value = code;
+            document.getElementById('code-output-modal').style.display = 'flex';
+        }
+
+        function copyCode() {
+            const area = document.getElementById('code-area');
+            area.select();
+            document.execCommand('copy');
+            alert('코드가 클립보드에 복사되었습니다. app.js에 붙여넣기 하세요.');
+        }
+
+        function closeModal(e) {
+            document.getElementById('code-output-modal').style.display = 'none';
+        }
+    </script>
+</body>
+
+</html>
